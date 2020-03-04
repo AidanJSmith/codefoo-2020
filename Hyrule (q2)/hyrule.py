@@ -46,5 +46,5 @@ class Tree:
         
 x=Tree(1,0, "The Quest Starts")
 maxrupee=sorted(x.getFinals())[-1:][0] #Filter the array of all remaining logical states and pick the highest
-print("The max number of rupees Link can earn is",maxrupee)
+print("The maximum number of rupees Link can earn is",maxrupee)
 print(x.findNodePath(maxrupee)) #This architecture can allow link to pick specific amounts of rupees to find as well, i.e: calling this function with any other number than the max
