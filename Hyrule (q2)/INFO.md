@@ -1,5 +1,5 @@
 # Python Implementation of Link's Summer Job list
-> It's not safe to go alone... so go with every logical permutation, just to be safe.
+> ### It's not safe to go alone... so go with every logical permutation, just to be safe.
 ---
 ## Running the code
 There are no required packages, this code is designed to operate with python 3.
