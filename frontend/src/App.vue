@@ -9,7 +9,7 @@
           <b class="title is-size-1 column">World's Coolest Lorem Ipsum</b>
         </div>
         <div class="columns">
-          <div class="body column">Look at all of this great, fascinating text that I'm goingok at all of this great, fascinating text that I'm goingok at all of this great, fascinating text that I'm goingok at all of this great, fascinating text that I'm goingok at all of this great, fascinating text that I'm goingok at all of this great, fascinating text that I'm going to read right now. I sure do love reading all of this text.</div>
+          <div class="body column">Look at all of this great, fascinating text that I'm goingok at all of this great, fascinating>Look at all of this great, fascinating text that I'm goingok at all of this great, fascinating>Look at all of this great, fascinating text that I'm goingok at all of this great, fascinating>Look at all of this great, fascinating text that I'm goingok at all of this great, fascinating>Look at all of this great, fascinating text that I'm goingok at all of this great, fascinating>Look at all of this great, fascinating text that I'm goingok at all of this great, fascinating>Look at all of this great, fascinating text that I'm goingok at all of this great, fascinating>Look at all of this great, fascinating text that I'm goingok at all of this great, fascinating>Look at all of this great, fascinating text that I'm goingok at all of this great, fascinating>Look at all of this great, fascinating text that I'm goingok at all of this great, fascinating>Look at all of this great, fascinating text that I'm goingok at all of this great, fascinating>Look at all of this great, fascinating text that I'm goingok at all of this great, fascinating>Look at all of this great, fascinating text that I'm goingok at all of this great, fascinating>Look at all of this great, fascinating text that I'm goingok at all of this great, fascinating text that I'm goingok at all of this great, fascinating text that I'm goingok at all of this great, fascinating text that I'm goingok at all of this great, fascinating text that I'm goingok at all of this great, fascinating text that I'm going to read right now. I sure do love reading all of this text.</div>
         </div>
      </div>
     <div class="column playlist is-4">
@@ -40,7 +40,8 @@ export default {
   text-align: left;
   color: #2c3e50;
   margin-top: 10vh;
-
+  text-rendering: optimizeLegibility;
+  -moz-user-select: none;
 }
 video {
   width:130vh;
@@ -72,12 +73,19 @@ video {
    /* Large devices (desktops, 992px and up) */
   @media (min-width: 992px) {  
     #app {
-                margin-left:10vw;
+                margin-left:0%;
               }
   }
 
    /* Extra large devices (large desktops, 1200px and up) */
   @media (min-width: 1200px) { 
-    
+    #app {
+                margin-left:0%;
+              }
+   }
+   @media (min-width: 1700px) { 
+    #app {
+                margin-left:10%;
+              }
    }
 </style>

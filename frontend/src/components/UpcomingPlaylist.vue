@@ -14,7 +14,7 @@
                 <hr :v-if="val!=3"/>    
             </div>
         </div>
-        <button class="load-btn"> <b>Load More</b></button>
+        <button class="load-btn"> <b>Load More</b> </button>
     </div>
 </template>
 
@@ -62,10 +62,13 @@ hr {
     font-size:1.15em;
     -webkit-text-stroke-width: .06vh;
     -webkit-text-stroke-color: white;
+    user-select: none;
     outline: none;
+    display: inline-block; 
+    cursor: pointer;
 }
-.load-btn :after {
-    background-color: rgba(191, 19, 19, 0.876);
+.load-btn:active {
+    background-color: rgb(172, 18, 18);
 }
 .card-time {
     position: absolute;
@@ -74,5 +77,36 @@ hr {
     bottom:15%;
     left:75%;
     font-size:.8em;
+    -webkit-text-stroke-width: .06vh;
+    -webkit-text-stroke-color: white;
 }
+  @media (min-width: 576px) {  
+    .card-time {
+        bottom:5%;
+        left:90%;
+    }
+  }
+   /* Medium devices (tablets, 768px and up) */
+  @media (min-width: 768px) { 
+    .card-time {
+            bottom:5%;
+            left:80%;
+        }
+   }
+
+   /* Large devices (desktops, 992px and up) */
+  @media (min-width: 992px) {  
+    .card-time {
+        bottom:45%;
+        left:70%;
+    }
+  }
+
+   /* Extra large devices (large desktops, 1200px and up) */
+  @media (min-width: 1200px) { 
+    .card-time {
+        bottom:15%;
+        left:75%;
+    }
+   }
 </style>
