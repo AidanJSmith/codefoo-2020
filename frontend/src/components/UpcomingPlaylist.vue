@@ -3,7 +3,7 @@
         <div v-for="val in Array(4).keys()" :key="val">
             <div class="columns">
                 <div class="column card-image" style="background-image:">   
-                    <div class="card-time">3:21</div>
+                    <div class="card-time" :style="styleTime">3:21</div>
                     <img class="card-image" src="https://external-content.duckduckgo.com/iu/?u=http%3A%2F%2Fpbs.bento.storage.s3.amazonaws.com%2Fhostedbento-prod%2Ffiler_public%2FBig%2520Pacific%2FPhotos%2FBigPacific_Promo_Thumb.jpg&f=1&nofb=1"/>
                 </div>
                 <div class="column playlist-header">
@@ -26,6 +26,11 @@ export default {
         cards: [],
         index: Number,
     },
+    computed : {
+        styleTime() {
+            return "right:"+screen.width*.005+5+"%;"
+        }
+    }
 }
 </script>
 
@@ -74,39 +79,29 @@ hr {
     position: absolute;
     z-index: 99;
     color:white;
-    bottom:15%;
-    left:75%;
     font-size:.8em;
     -webkit-text-stroke-width: .06vh;
     -webkit-text-stroke-color: white;
 }
   @media (min-width: 576px) {  
-    .card-time {
-        bottom:5%;
-        left:90%;
-    }
+    #app {
+            margin-left:0;
+          }
   }
    /* Medium devices (tablets, 768px and up) */
   @media (min-width: 768px) { 
-    .card-time {
-            bottom:5%;
-            left:80%;
-        }
+
    }
 
    /* Large devices (desktops, 992px and up) */
   @media (min-width: 992px) {  
-    .card-time {
-        bottom:45%;
-        left:70%;
-    }
+    #app {
+                margin-left:10%;
+              }
   }
 
    /* Extra large devices (large desktops, 1200px and up) */
   @media (min-width: 1200px) { 
-    .card-time {
-        bottom:15%;
-        left:75%;
-    }
+    
    }
 </style>
