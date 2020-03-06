@@ -1,5 +1,6 @@
 <template>
   <div id="app" class="container">
+    <div v-if="screen>=1100">
     <div class="columns">
       <div class="column is-four-fifths player">
         <video controls>
@@ -16,7 +17,23 @@
       <UpcomingPlaylist/>
     </div>
     </div>
-  
+  </div>
+  <div v-else>
+    <div class="columns">
+      <div class="column player">
+        <video controls>
+          <source src="https://assets14.ign.com/videos/zencoder/2020/02/20/416/b7422245c865698feee05a1f809eeb4c-110000-1582191191.mp4" type="video/mp4">        <!-- fallback content here -->
+        </video>
+        <div class="columns">
+          <b class="title is-size-1 column">World's Coolest Lorem Ipsum</b>
+        </div>
+        <div class="columns">
+          <div class="body column">Look at all of this great, fascinating text that I'm goingok at all of this great, fascinating>Look at all of this great, fascinating text that I'm goingok at all of this great, fascinating>Look at all of this great, fascinating text that I'm goingok at all of this great, fascinating>Look at all of this great, fascinating text that I'm goingok at all of this great, fascinating>Look at all of this great, fascinating text that I'm goingok at all of this great, fascinating>Look at all of this great, fascinating text that I'm goingok at all of this great, fascinating>Look at all of this great, fascinating text that I'm goingok at all of this great, fascinating>Look at all of this great, fascinating text that I'm goingok at all of this great, fascinating>Look at all of this great, fascinating text that I'm goingok at all of this great, fascinating>Look at all of this great, fascinating text that I'm goingok at all of this great, fascinating>Look at all of this great, fascinating text that I'm goingok at all of this great, fascinating>Look at all of this great, fascinating text that I'm goingok at all of this great, fascinating>Look at all of this great, fascinating text that I'm goingok at all of this great, fascinating>Look at all of this great, fascinating text that I'm goingok at all of this great, fascinating text that I'm goingok at all of this great, fascinating text that I'm goingok at all of this great, fascinating text that I'm goingok at all of this great, fascinating text that I'm goingok at all of this great, fascinating text that I'm going to read right now. I sure do love reading all of this text.</div>
+        </div>
+     </div>
+    </div>
+    <UpcomingPlaylist/>
+  </div>
    
   </div>
 </template>
@@ -28,6 +45,24 @@ export default {
   name: 'App',
   components: {
     UpcomingPlaylist
+  }, data() {
+    return {
+      screen: 0,
+    }
+  },
+  methods: {
+    onResize() {
+      this.screen=window.innerWidth; 
+    }
+  },
+  mounted() {
+    // Register an event listener when the Vue component is ready
+    this.screen=window.innerWidth;
+    window.addEventListener('resize', this.onResize)
+  },
+  beforeDestroy() {
+    // Unregister the event listener before destroying this Vue instance
+    window.removeEventListener('resize', this.onResize)
   }
 }
 </script>
@@ -44,7 +79,7 @@ export default {
   -moz-user-select: none;
 }
 video {
-  width:130vh;
+  width:100%;
 }
 
 .body {
@@ -63,26 +98,35 @@ video {
 /* Small devices (landscape phones, 576px and up) */
   @media (min-width: 576px) {  }
     #app {
-            margin-left:0;
+            margin-left:0%;
           }
+    video {
+      width:100%
+    }
    /* Medium devices (tablets, 768px and up) */
   @media (min-width: 768px) { 
 
    }
 
    /* Large devices (desktops, 992px and up) */
-  @media (min-width: 992px) {  
+  @media (min-width: 1100) {  
     #app {
                 margin-left:0%;
               }
   }
 
    /* Extra large devices (large desktops, 1200px and up) */
-  @media (min-width: 1200px) { 
+  @media (min-width: 1200 px) { 
     #app {
                 margin-left:0%;
-              }
+              
+            }
+    .player {
+       width:0%;
+
+     }
    }
+
    @media (min-width: 1700px) { 
     #app {
                 margin-left:10%;

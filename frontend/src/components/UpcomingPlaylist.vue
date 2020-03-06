@@ -4,7 +4,7 @@
             <div class="columns">
                 <div class="column card-image" style="background-image:">   
                     <div class="card-time" :style="styleTime">3:21</div>
-                    <img class="card-image" src="https://external-content.duckduckgo.com/iu/?u=http%3A%2F%2Fpbs.bento.storage.s3.amazonaws.com%2Fhostedbento-prod%2Ffiler_public%2FBig%2520Pacific%2FPhotos%2FBigPacific_Promo_Thumb.jpg&f=1&nofb=1"/>
+                    <img class="card-image" :ref="'cardImage'" src="https://external-content.duckduckgo.com/iu/?u=http%3A%2F%2Fpbs.bento.storage.s3.amazonaws.com%2Fhostedbento-prod%2Ffiler_public%2FBig%2520Pacific%2FPhotos%2FBigPacific_Promo_Thumb.jpg&f=1&nofb=1"/>
                 </div>
                 <div class="column playlist-header">
                     This is my attempt at writing a lot of example text.
@@ -25,11 +25,29 @@ export default {
     props: {
         cards: [],
         index: Number,
+    }, data() {
+        return {
+            isMounted: false
+        }
     },
     computed : {
         styleTime() {
-            return "right:"+screen.width*.005+5+"%;"
-        }
+            let sw=screen.width;
+            let bottom=0;
+            switch (true) {
+                
+                case (sw>=1500):
+                    bottom=10;
+                    break;
+                case (sw>=1396):
+                    bottom=20;
+                    break;
+            }
+            return "bottom:"+bottom+"%;right:"+screen.width*.005+5+"%;";
+        },
+    },
+    mounted(){
+        this.isMounted = true;
     }
 }
 </script>
@@ -49,6 +67,8 @@ hr {
 }
 .card-image {
     border-radius: .5vw;
+    max-height:100%; 
+    max-width:100%;
 }
 .playlist-header {
     font-size:1.2em;
@@ -96,12 +116,39 @@ hr {
    /* Large devices (desktops, 992px and up) */
   @media (min-width: 992px) {  
     #app {
-                margin-left:10%;
+                margin-left:5%;
               }
   }
 
+   @media (min-width: 1220px) { 
+       .root {
+                width: 70%;
+              }
+    
+   }
+   @media (min-width: 1260px) { 
+       .root {
+                width: 100%;
+              }
+    
+   }
    /* Extra large devices (large desktops, 1200px and up) */
-  @media (min-width: 1200px) { 
+  @media (min-width: 1400px) { 
+       .root {
+                width: 80%;
+              }
+    
+   }
+    @media (min-width: 1420) { 
+    .root {
+            width: 50%;
+            }
+
+    }
+   @media (min-width: 1500px) { 
+       .root {
+                width: 100%;
+              }
     
    }
 </style>
