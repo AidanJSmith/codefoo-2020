@@ -39,6 +39,13 @@
 </template>
 
 <script>
+/*To-Do:
+Fix time code.
+Integrate the API... when I have time.
+Start fixing the player and making it look nice.
+
+
+*/
 import './../node_modules/bulma/css/bulma.css';
 import UpcomingPlaylist from './components/UpcomingPlaylist';
 export default {

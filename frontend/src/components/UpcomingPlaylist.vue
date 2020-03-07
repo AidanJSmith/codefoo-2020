@@ -1,10 +1,10 @@
 <template>
     <div class=" root">
-        <div v-for="val in Array(4).keys()" :key="val">
+        <div>
             <div class="columns">
                 <div class="column card-image" style="background-image:">   
                     <div class="card-time" :style="styleTime">3:21</div>
-                    <img class="card-image" :ref="'cardImage'" src="https://external-content.duckduckgo.com/iu/?u=http%3A%2F%2Fpbs.bento.storage.s3.amazonaws.com%2Fhostedbento-prod%2Ffiler_public%2FBig%2520Pacific%2FPhotos%2FBigPacific_Promo_Thumb.jpg&f=1&nofb=1"/>
+                    <img class="card-image" :ref="'cardImage'" src="../../goal.jpg"/>
                 </div>
                 <div class="column playlist-header">
                     This is my attempt at writing a lot of example text.
@@ -13,7 +13,43 @@
             <div class="columns"> 
                 <hr :v-if="val!=3"/>    
             </div>
+            <div class="columns">
+                <div class="column card-image" style="background-image:">   
+                    <div class="card-time" :style="styleTime">3:21</div>
+                    <img class="card-image" :ref="'cardImage'" src="../../goal.jpg"/>
+                </div>
+                <div class="column playlist-header">
+                    This is my attempt at writing a lot of example text.
+                </div>
+            </div>
+            <div class="columns"> 
+                <hr :v-if="val!=3"/>    
+            </div>
+            <div class="columns">
+                <div class="column card-image" style="background-image:">   
+                    <div class="card-time" :style="styleTime">3:21</div>
+                    <img class="card-image" :ref="'cardImage'" src="../../goal.jpg"/>
+                </div>
+                <div class="column playlist-header">
+                    This is my attempt at writing a lot of example text.
+                </div>
+            </div>
+            <div class="columns"> 
+                <hr :v-if="val!=3"/>    
+            </div>
+            <div class="columns">
+                <div class="column card-image" style="background-image:">   
+                    <div class="card-time" :style="styleTime">3:21</div>
+                    <img class="card-image" :ref="'cardImage'" src="../../goal.jpg"/>
+                </div>
+                <div class="column playlist-header">
+                    This is my attempt at writing a lot of example text.
+                </div>
+            </div>
+            
         </div>
+        <br/>
+        <br/>
         <button class="load-btn"> <b>Load More</b> </button>
     </div>
 </template>
@@ -36,11 +72,17 @@ export default {
             let bottom=0;
             switch (true) {
                 
-                case (sw>=1500):
-                    bottom=10;
+                case (sw>=1253):
+                    bottom=0;
                     break;
-                case (sw>=1396):
-                    bottom=20;
+                case (sw>=1210):
+                    bottom=35;
+                    break;
+                case(sw>=1211):
+                    bottom=35;
+                    break;
+                case(sw>=1095):
+                    bottom=15;
                     break;
             }
             return "bottom:"+bottom+"%;right:"+screen.width*.005+5+"%;";
@@ -98,7 +140,8 @@ hr {
 .card-time {
     position: absolute;
     z-index: 99;
-    color:white;
+    color:black;
+    line-height:6em;
     font-size:.8em;
     -webkit-text-stroke-width: .06vh;
     -webkit-text-stroke-color: white;
