@@ -52,16 +52,53 @@
             <div class="columns">
                 <div class="column card-image" style="background-image:">   
                     <div class="card-time-lg">3:21</div>
-                    <img class="card-image" :ref="'cardImage'" src="https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftse1.mm.bing.net%2Fth%3Fid%3DOIP.0uIpcBNIlf72NCC4sDo5yQHaEK%26pid%3DApi%26h%3D160&f=1"/>
-                </div>
-                <div class="column playlist-header">
-                    This is my attempt at writing a lot of example text.
+                    <img class="card-image-lg" :ref="'cardImage'" src="https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftse1.mm.bing.net%2Fth%3Fid%3DOIP.0uIpcBNIlf72NCC4sDo5yQHaEK%26pid%3DApi%26h%3D160&f=1"/>
                 </div>
             </div>
+                <div class="column playlist-header" style="text-align:center">
+                    This is my attempt at writing a lot of example text.
+                </div>
             <div class="columns"> 
                 <hr :v-if="val!=3"/>    
             </div>
+            <div class="columns">
+                <div class="column card-image" style="background-image:">   
+                    <div class="card-time-lg">3:21</div>
+                    <img class="card-image-lg" :ref="'cardImage'" src="https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftse1.mm.bing.net%2Fth%3Fid%3DOIP.0uIpcBNIlf72NCC4sDo5yQHaEK%26pid%3DApi%26h%3D160&f=1"/>
+                </div>
+            </div>
+                <div class="column playlist-header" style="text-align:center">
+                    This is my attempt at writing a lot of example text.
+                </div>
+            <div class="columns"> 
+                <hr :v-if="val!=3"/>    
+            </div>
+            <div class="columns">
+                <div class="column card-image" style="background-image:">   
+                    <div class="card-time-lg">3:21</div>
+                    <img class="card-image-lg" :ref="'cardImage'" src="https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftse1.mm.bing.net%2Fth%3Fid%3DOIP.0uIpcBNIlf72NCC4sDo5yQHaEK%26pid%3DApi%26h%3D160&f=1"/>
+                </div>
+            </div>
+                <div class="column playlist-header" style="text-align:center">
+                    This is my attempt at writing a lot of example text.
+                </div>
+            <div class="columns"> 
+                <hr :v-if="val!=3"/>    
+            </div>
+            <div class="columns">
+                <div class="column card-image" style="background-image:">   
+                    <div class="card-time-lg">3:21</div>
+                    <img class="card-image-lg" :ref="'cardImage'" src="https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftse1.mm.bing.net%2Fth%3Fid%3DOIP.0uIpcBNIlf72NCC4sDo5yQHaEK%26pid%3DApi%26h%3D160&f=1"/>
+                </div>
+            </div>
+                <div class="column playlist-header" style="text-align:center">
+                    This is my attempt at writing a lot of example text.
+                </div>
+            <div class="columns"> 
+            </div>
+
         </div>
+        
         <br/>
         <br/>
         <button class="load-btn"> <b>Load More</b> </button>
@@ -122,6 +159,11 @@ hr {
     max-height:100%; 
     max-width:100%;
 }
+.card-image-lg {
+    width:100%;
+    max-height:100%; 
+    max-width:100%;
+}
 .playlist-header {
     font-size:1.2em;
     -webkit-text-stroke-width: .03vh;
@@ -165,24 +207,28 @@ hr {
     position: absolute;
     z-index: 99;
     color:white;
-    font-size:.8em;
+    font-size:4vw;
     padding:.2em;
     padding-left:.4em;
     padding-right:.4em;
     -webkit-text-stroke-width: .06vh;
     -webkit-text-stroke-color: white;
     background-color:#3F4144;
-    top:70%;
-    left:30%;
+    top:80%;
+    left:80%;
 }
-  @media (min-width: 576px) {  
-    #app {
-            margin-left:0;
-          }
+  @media (min-width: 200px) {  
+    .card-time-lg {
+        top:70%;
+        left:80%;
+    }
   }
    /* Medium devices (tablets, 768px and up) */
   @media (min-width: 768px) { 
-
+    .card-time-lg {
+            top:80%;
+            left:80%;
+        }
    }
 
    /* Large devices (desktops, 992px and up) */
