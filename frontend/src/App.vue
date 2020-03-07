@@ -86,7 +86,7 @@ export default {
   -moz-user-select: none;
 }
 video {
-  width:100%;
+  width:110%;
 }
 
 .body {
@@ -108,7 +108,7 @@ video {
             margin-left:0%;
           }
     video {
-      width:100%
+      width:110%
     }
    /* Medium devices (tablets, 768px and up) */
   @media (min-width: 768px) { 

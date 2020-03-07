@@ -1,10 +1,10 @@
 <template>
     <div class=" root">
-        <div>
+        <div v-if="screen>=1100">
             <div class="columns">
                 <div class="column card-image" style="background-image:">   
                     <div class="card-time" :style="styleTime">3:21</div>
-                    <img class="card-image" :ref="'cardImage'" src="../../goal.jpg"/>
+                    <img class="card-image" :ref="'cardImage'" src="https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftse1.mm.bing.net%2Fth%3Fid%3DOIP.0uIpcBNIlf72NCC4sDo5yQHaEK%26pid%3DApi%26h%3D160&f=1"/>
                 </div>
                 <div class="column playlist-header">
                     This is my attempt at writing a lot of example text.
@@ -16,7 +16,7 @@
             <div class="columns">
                 <div class="column card-image" style="background-image:">   
                     <div class="card-time" :style="styleTime">3:21</div>
-                    <img class="card-image" :ref="'cardImage'" src="../../goal.jpg"/>
+                    <img class="card-image" :ref="'cardImage'" src="https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftse1.mm.bing.net%2Fth%3Fid%3DOIP.0uIpcBNIlf72NCC4sDo5yQHaEK%26pid%3DApi%26h%3D160&f=1"/>
                 </div>
                 <div class="column playlist-header">
                     This is my attempt at writing a lot of example text.
@@ -28,7 +28,7 @@
             <div class="columns">
                 <div class="column card-image" style="background-image:">   
                     <div class="card-time" :style="styleTime">3:21</div>
-                    <img class="card-image" :ref="'cardImage'" src="../../goal.jpg"/>
+                    <img class="card-image" :ref="'cardImage'" src="https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftse1.mm.bing.net%2Fth%3Fid%3DOIP.0uIpcBNIlf72NCC4sDo5yQHaEK%26pid%3DApi%26h%3D160&f=1"/>
                 </div>
                 <div class="column playlist-header">
                     This is my attempt at writing a lot of example text.
@@ -40,13 +40,27 @@
             <div class="columns">
                 <div class="column card-image" style="background-image:">   
                     <div class="card-time" :style="styleTime">3:21</div>
-                    <img class="card-image" :ref="'cardImage'" src="../../goal.jpg"/>
+                    <img class="card-image" :ref="'cardImage'" src="https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftse1.mm.bing.net%2Fth%3Fid%3DOIP.0uIpcBNIlf72NCC4sDo5yQHaEK%26pid%3DApi%26h%3D160&f=1"/>
                 </div>
                 <div class="column playlist-header">
                     This is my attempt at writing a lot of example text.
                 </div>
             </div>
             
+        </div>
+        <div v-else>
+            <div class="columns">
+                <div class="column card-image" style="background-image:">   
+                    <div class="card-time-lg">3:21</div>
+                    <img class="card-image" :ref="'cardImage'" src="https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftse1.mm.bing.net%2Fth%3Fid%3DOIP.0uIpcBNIlf72NCC4sDo5yQHaEK%26pid%3DApi%26h%3D160&f=1"/>
+                </div>
+                <div class="column playlist-header">
+                    This is my attempt at writing a lot of example text.
+                </div>
+            </div>
+            <div class="columns"> 
+                <hr :v-if="val!=3"/>    
+            </div>
         </div>
         <br/>
         <br/>
@@ -63,44 +77,40 @@ export default {
         index: Number,
     }, data() {
         return {
-            isMounted: false
+        screen: 0,
         }
+    },
+    methods: {
+        onResize() {
+        this.screen=window.innerWidth; 
+        }
+    },
+    mounted() {
+        // Register an event listener when the Vue component is ready
+        this.screen=window.innerWidth;
+        window.addEventListener('resize', this.onResize)
+    },
+    beforeDestroy() {
+        // Unregister the event listener before destroying this Vue instance
+        window.removeEventListener('resize', this.onResize)
     },
     computed : {
         styleTime() {
-            let sw=screen.width;
-            let bottom=0;
-            switch (true) {
-                
-                case (sw>=1253):
-                    bottom=0;
-                    break;
-                case (sw>=1210):
-                    bottom=35;
-                    break;
-                case(sw>=1211):
-                    bottom=35;
-                    break;
-                case(sw>=1095):
-                    bottom=15;
-                    break;
-            }
-            return "bottom:"+bottom+"%;right:"+screen.width*.005+5+"%;";
+
+        return "right:"+window.innerWidth*.0076+5+"%;";
         },
     },
-    mounted(){
-        this.isMounted = true;
-    }
+
 }
 </script>
 
 <style scoped>
 hr {
-    margin-top:2.5%;
+    margin-top:2.35%;
     height:.25vh;
     width:110%;
     margin-left:2%;
-    margin-bottom:5%;
+    margin-bottom:2.35%;
     background-color:lightgray;
 }
 .root {
@@ -115,9 +125,10 @@ hr {
 .playlist-header {
     font-size:1.2em;
     -webkit-text-stroke-width: .03vh;
-    -webkit-text-stroke-color: #363636;
+    -webkit-text-stroke-color:#3F4144;
     margin-top:.25em;
     line-height: 1.3;
+    color:#3F4144;
 }
 .load-btn {
     background-color: #BF1313;
@@ -126,7 +137,7 @@ hr {
     color:white;
     border-radius:.4vw;
     border:none;
-    font-size:1.15em;
+    font-size:1.25em;
     -webkit-text-stroke-width: .06vh;
     -webkit-text-stroke-color: white;
     user-select: none;
@@ -140,11 +151,29 @@ hr {
 .card-time {
     position: absolute;
     z-index: 99;
-    color:black;
-    line-height:6em;
-    font-size:.8em;
+    color:white;
+    font-size:.65vw;
+    padding:.2em;
+    padding-left:.4em;
+    padding-right:.4em;
     -webkit-text-stroke-width: .06vh;
     -webkit-text-stroke-color: white;
+    background-color:#3F4144;
+    margin-top:32.5%;
+}
+.card-time-lg {
+    position: absolute;
+    z-index: 99;
+    color:white;
+    font-size:.8em;
+    padding:.2em;
+    padding-left:.4em;
+    padding-right:.4em;
+    -webkit-text-stroke-width: .06vh;
+    -webkit-text-stroke-color: white;
+    background-color:#3F4144;
+    top:70%;
+    left:30%;
 }
   @media (min-width: 576px) {  
     #app {
