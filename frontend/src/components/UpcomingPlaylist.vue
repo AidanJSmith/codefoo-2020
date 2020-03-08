@@ -11,7 +11,7 @@
                 </div>
             </div>
             <div class="columns"> 
-                <hr :v-if="val!=3"/>    
+                <hr :v-if="0!=3"/>    
             </div>
             <div class="columns">
                 <div class="column card-image" style="background-image:">   
@@ -23,7 +23,7 @@
                 </div>
             </div>
             <div class="columns"> 
-                <hr :v-if="val!=3"/>    
+                <hr :v-if="0!=3"/>    
             </div>
             <div class="columns">
                 <div class="column card-image" style="background-image:">   
@@ -35,7 +35,7 @@
                 </div>
             </div>
             <div class="columns"> 
-                <hr :v-if="val!=3"/>    
+                <hr :v-if="0!=3"/>    
             </div>
             <div class="columns">
                 <div class="column card-image" style="background-image:">   
@@ -59,7 +59,7 @@
                     This is my attempt at writing a lot of example text.
                 </div>
             <div class="columns"> 
-                <hr :v-if="val!=3"/>    
+                <hr :v-if="0!=3"/>    
             </div>
             <div class="columns">
                 <div class="column card-image" style="background-image:">   
@@ -71,7 +71,7 @@
                     This is my attempt at writing a lot of example text.
                 </div>
             <div class="columns"> 
-                <hr :v-if="val!=3"/>    
+                <hr :v-if="0!=3"/>    
             </div>
             <div class="columns">
                 <div class="column card-image" style="background-image:">   
@@ -83,7 +83,7 @@
                     This is my attempt at writing a lot of example text.
                 </div>
             <div class="columns"> 
-                <hr :v-if="val!=3"/>    
+                <hr :v-if="0!=3"/>    
             </div>
             <div class="columns">
                 <div class="column card-image" style="background-image:">   

@@ -3,9 +3,7 @@
     <div v-if="screen>=1100">
     <div class="columns">
       <div class="column is-four-fifths player">
-        <video controls>
-          <source src="https://assets14.ign.com/videos/zencoder/2020/02/20/416/b7422245c865698feee05a1f809eeb4c-110000-1582191191.mp4" type="video/mp4">        <!-- fallback content here -->
-        </video>
+        <VideoPlayer/>
         <div class="columns">
           <b class="title is-size-1 column">World's Coolest Lorem Ipsum</b>
         </div>
@@ -48,10 +46,12 @@ Start fixing the player and making it look nice.
 */
 import './../node_modules/bulma/css/bulma.css';
 import UpcomingPlaylist from './components/UpcomingPlaylist';
+import VideoPlayer from './components/VideoPlayer';
 export default {
   name: 'App',
   components: {
-    UpcomingPlaylist
+    UpcomingPlaylist,
+    VideoPlayer
   }, data() {
     return {
       screen: 0,
