@@ -17,11 +17,9 @@
     </div>
   </div>
   <div v-else>
-    <div class="columns">
-      <div class="column player">
-        <video controls>
-          <source src="https://assets14.ign.com/videos/zencoder/2020/02/20/416/b7422245c865698feee05a1f809eeb4c-110000-1582191191.mp4" type="video/mp4">        <!-- fallback content here -->
-        </video>
+      <div class="columns">
+      <div class="column is-four-fifths player">
+        <VideoPlayer/>
         <div class="columns">
           <b class="title is-size-1 column">World's Coolest Lorem Ipsum</b>
         </div>

@@ -3,7 +3,7 @@
      <video ref="video">
      </video>
      <div id="video-controls" class="controls" data-state="hidden">
-        <div class="progress-container columns" ref="progress"  @mousemove="doDrag($event)" @mouseup="dragging=false"  @mousedown="dragging=true"  @click="setTime($event)">
+        <div class="progress-container columns is-mobile" ref="progress"  @mousemove="doDrag($event)" @mouseup="dragging=false"  @mousedown="dragging=true"  @click="setTime($event)">
           <span class="finished"  :style="`width:`+currentTime+'%;'"></span>
           <div class="currentplace"></div>
           <span  class="inmem" :style="`width:` + (100-currentTime>=20 ? 20 : 100-currentTime) +`%;`"></span>
@@ -105,19 +105,13 @@ button {
 	-moz-border-radius: 25px;
 	-webkit-border-radius: 25px;
 	border-radius: 25px;
-}
-.progress-container:hover {
-  width:100%;
-  transform: translate(.5%,-4.5vh);
-  height:1.25vh;
-  background: rgb(149, 149, 149);
-	-moz-border-radius: 25px;
-	-webkit-border-radius: 25px;
-	border-radius: 25px;
+  white-space: nowrap;
+  flex-wrap: false;
 }
 
+
 .finished {
-  display: block;
+  display:inline-block;
   height: 100%;
   border-top-right-radius: 8px;
   border-bottom-right-radius: 8px;
@@ -128,7 +122,7 @@ button {
   overflow: hidden;
 }
 .inmem {
-  display: block;
+  display:inline-block;
   height: 100%;
   transform:translateX(-2%);
   border-top-right-radius: 8px;
@@ -140,6 +134,7 @@ button {
   overflow: hidden;
 }
 .currentplace {
+  display:inline-block;
   z-index:10;
   height: 1.5vh;
   transform: translateY(-25%);
@@ -154,6 +149,7 @@ button {
     height: 2.5vh;
     width:2.5vh;
     border: .7vh solid white;
+    transform: translateY(-40%);
 
   }
 h3 {
