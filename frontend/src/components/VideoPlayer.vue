@@ -1,12 +1,12 @@
 <template>
   <div>
-     <video ref="video">
+     <video ref="video"  @click="changeVideoState('play')">
      </video>
      <div id="video-controls" class="controls" data-state="hidden">
         <div class="progress-container columns is-mobile" ref="progress"  @mousemove="doDrag($event)" @mouseup="dragging=false"  @mousedown="dragging=true"  @click="setTime($event)">
           <span class="finished"  :style="`width:`+currentTime+'%;'"></span>
           <div class="currentplace"></div>
-          <span  class="inmem" :style="`width:` + (100-currentTime>=20 ? 20 : 100-currentTime) +`%;`"></span>
+          <span  class="inmem" :style="`width:` + ((bufferedTime+currentTime)>=100 ? 100-currentTime : bufferedTime) +`%;`"></span>
         </div>
         <div class="columns">
           <div class="columns">
@@ -34,13 +34,18 @@ export default {
       isMounted:false,
       currentTime:0,
       dragging:false,
+      bufferedTime:0,
     }
   },
   methods: {
     changeTime() {
       const video=this.$refs.video;
       this.currentTime= 100*video.currentTime/video.duration;
-      setTimeout(this.changeTime,200);
+      let buff=video.buffered
+      if(buff.length) {
+        this.bufferedTime=100*(-1*buff.start(buff.length-1)+buff.end(buff.length-1))/video.duration;
+      }
+      setTimeout(this.changeTime,this.dragging ? 20 : 200);
     },
     setTime(event) {
       const video=this.$refs.video;
@@ -152,18 +157,5 @@ button {
     transform: translateY(-40%);
 
   }
-h3 {
-  margin: 40px 0 0;
-}
-ul {
-  list-style-type: none;
-  padding: 0;
-}
-li {
-  display: inline-block;
-  margin: 0 10px;
-}
-a {
-  color: #42b983;
-}
+
 </style>
