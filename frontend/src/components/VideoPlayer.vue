@@ -1,5 +1,15 @@
 <template>
-  <div>
+  <div class="vid-container">
+    <link rel="stylesheet" 
+        href="https://use.fontawesome.com/releases/v5.2.0/css/all.css" 
+        integrity="sha384-hWVjflwFxL6sNzntih27bfxkr27PmbbK/iSvJ+a4+0owXq79v+lsFkW54bOGbiDQ" 
+        crossorigin="anonymous">
+     <div class="topbar" data-state="hidden">
+        <div class="columns is-mobile" ref="progress">
+            <div class="toptitle column is-8">Lorem Ipsum Dolor Set Amit</div>
+            <i class="fas fa-share share column is-4"></i>
+        </div>
+    </div>
      <video ref="video"  @click="changeVideoState('play')">
      </video>
      <div id="video-controls" class="controls" data-state="hidden">
@@ -43,7 +53,11 @@ export default {
       this.currentTime= 100*video.currentTime/video.duration;
       let buff=video.buffered
       if(buff.length) {
-        this.bufferedTime=100*(-1*buff.start(buff.length-1)+buff.end(buff.length-1))/video.duration;
+        let x= this.bufferedTime
+        this.bufferedTime= 100*(-1*buff.start(buff.length-1)+buff.end(buff.length-1))/video.duration;
+        if (this.bufferedTime<=2) {
+          this.bufferedTime=x;
+        }
       }
       setTimeout(this.changeTime,this.dragging ? 20 : 200);
     },
@@ -90,6 +104,11 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
+
+.vid-container {
+  transform: translateY(-5%);
+  margin-bottom: -3.5%;
+}
 .controls {
   z-index:9;
   width:95%;
@@ -102,10 +121,26 @@ button {
   width:90%;
   height:90%;
 }
+.toptitle {
+  color:white;    
+  font-size:1.1vw;
+  transform: translate(-3%, -375%);
+  -webkit-text-stroke-width: .01vh;
+  -webkit-text-stroke-color: white;
+  
+}
+.share {
+  color:white;    
+  font-size:1.5vw;
+  transform: translate(60%,-375%);
+  -webkit-text-stroke-width: .04vh;
+  -webkit-text-stroke-color: white;
+  cursor:pointer;
+}
 .progress-container {
   width:100%;
   transform: translate(.5%,-4vh);
-  height:.5vh;
+  height:.3vh;
   background: rgb(149, 149, 149);
 	-moz-border-radius: 25px;
 	-webkit-border-radius: 25px;
@@ -114,10 +149,19 @@ button {
   flex-wrap: false;
 }
 
+.topbar {
+
+  transform: translate(5%,485%);
+  width:100%;
+}
+video {
+  border-radius:.6vw;
+}
 
 .finished {
   display:inline-block;
-  height: 100%;
+  height: 200%;
+  transform:translateY(-30%);
   border-top-right-radius: 8px;
   border-bottom-right-radius: 8px;
   border-top-left-radius: 20px;
@@ -141,13 +185,13 @@ button {
 .currentplace {
   display:inline-block;
   z-index:10;
-  height: 1.5vh;
-  transform: translateY(-25%);
+  height: 1.75vh;
+  transform: translate(-7%,-40%);
   background-color:#BF1313;
   border-radius:100%;
-  width:1.5vh;
+  width:1.75vh;
   display:block;
-  border: .5vh solid white;
+  border: .51vh solid white;
   }
 
   .progress-container:hover .currentplace {
@@ -158,4 +202,43 @@ button {
 
   }
 
+   @media (min-width: 0px) { 
+    .toptitle {
+      font-size:3vw;
+      transform: translate(-3%, -390%);
+
+    }
+    .share {
+      font-size:3.25vw;
+      transform: translate(60%,-390%);
+
+    }
+   }
+    @media (min-width: 763px) { 
+      .toptitle {
+        font-size:1.75vw;
+        
+      }
+      .share {
+        font-size:2vw;
+      }
+    }
+   @media (min-width: 1025px) { 
+      .toptitle {
+        font-size:1.5vw;
+        
+      }
+      .share {
+        font-size:1.75vw;
+      }
+   }
+   @media (min-width: 1274px) { 
+      .toptitle {
+        font-size:1.1vw;
+        
+      }
+      .share {
+        font-size:1.5vw;
+      }
+   }
 </style>
