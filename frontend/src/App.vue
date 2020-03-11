@@ -95,7 +95,7 @@ video {
   line-height:1.4;
 }
 .title {
-  margin-top:.75em;
+  margin-top:1.75em;
   font-family:  'Open Sans', 'Helvetica Neue', sans-serif, sans-serif;
   -webkit-text-stroke-width: .1vh;
   -webkit-text-stroke-color: rgb(#363636);

@@ -1,54 +1,161 @@
 <template>
   <div>
-    <video ref="video"></video>
-    <div id="video-controls" class="controls" data-state="hidden">
-      <button id="playpause" @click="changeVideoState('play')" type="button" data-state="play">Play/Pause</button>
-      <button id="stop" type="button" @click="changeVideoState('stop')">Stop</button>
-      <div class="progress">
-          <progress id="progress" value="1444" min="0" max="14444">
-            <span id="progress-bar"></span>
-          </progress>
+     <video ref="video">
+     </video>
+     <div id="video-controls" class="controls" data-state="hidden">
+        <div class="progress-container columns" ref="progress"  @mousemove="doDrag($event)" @mouseup="dragging=false"  @mousedown="dragging=true"  @click="setTime($event)">
+          <span class="finished"  :style="`width:`+currentTime+'%;'"></span>
+          <div class="currentplace"></div>
+          <span  class="inmem" :style="`width:` + (100-currentTime>=20 ? 20 : 100-currentTime) +`%;`"></span>
+        </div>
+        <div class="columns">
+          <div class="columns">
+          <button id="playpause" @click="changeVideoState('play')" type="button" data-state="play">Play/Pause</button>
+          <button id="stop" type="button" @click="changeVideoState('stop')">Stop</button>
+          <button id="mute" type="button" data-state="mute">Mute/Unmute</button>
+          <button id="volinc" type="button" data-state="volup">Vol+</button>
+          <button id="voldec" type="button" data-state="voldown">Vol-</button>
+          <button id="fs" type="button" data-state="go-fullscreen">Fullscreen</button>
+          </div>
+        </div>
       </div>
-      <button id="mute" type="button" data-state="mute">Mute/Unmute</button>
-      <button id="volinc" type="button" data-state="volup">Vol+</button>
-      <button id="voldec" type="button" data-state="voldown">Vol-</button>
-      <button id="fs" type="button" data-state="go-fullscreen">Fullscreen</button>
-    </div>
   </div>
 </template>
 
 <script>
+
 export default {
   name: 'VideoPlayer',
   props: {
-    msg: String
-  },methods: {
+    msg: String,
+  },
+  data() {
+    return {
+      isMounted:false,
+      currentTime:0,
+      dragging:false,
+    }
+  },
+  methods: {
+    changeTime() {
+      const video=this.$refs.video;
+      this.currentTime= 100*video.currentTime/video.duration;
+      setTimeout(this.changeTime,200);
+    },
+    setTime(event) {
+      const video=this.$refs.video;
+      console.log(event.clientX -  this.$refs.progress.getBoundingClientRect().left + "   " +this.$refs.progress.getBoundingClientRect().width);
+      video.currentTime=video.duration*(event.clientX -  this.$refs.progress.getBoundingClientRect().left)/this.$refs.progress.getBoundingClientRect().width;
+   },
+   stopDrag() {
+     this.dragging=false;
+   },
+   doDrag(event) {
+      const video=this.$refs.video;
+      if (this.dragging) {
+        console.log(event.clientX -  this.$refs.progress.getBoundingClientRect().left + "   " +this.$refs.progress.getBoundingClientRect().width);
+         video.currentTime=video.duration*(event.clientX -  this.$refs.progress.getBoundingClientRect().left)/this.$refs.progress.getBoundingClientRect().width;
+      }
+   },
     changeVideoState(state) {
-      let video=this.$refs.video;
-      console.log(video.paused)
-      if (state==`play`) {
+      const video=this.$refs.video;
+      if(state=="play") {
         if (video.paused) {
           video.play();
-        }
-        else {
+        } else {
           video.pause();
         }
-      if (state=='stop') {
-        console.log()
-        video.pause()      }
       }
+      if(state=='stop') {
+        video.currentTime=20;
 
-      console.log(this.$refs.video.play());
-    }
-  }, mounted () {
-    this.$refs.video.removeAttribute('controls');
-    this.$refs.video.src="https://assets14.ign.com/videos/zencoder/2020/02/21/1920/25f4e16785788e3ba92bb23b563d1e06-3906000-1582298169.mp4";
+      }
+      }
+    }, mounted () {
+        setInterval(this.changeTime(),20);
+        window.addEventListener('mouseup', this.stopDrag());
+        this.isMounted=true;
+        this.$refs.video.removeAttribute('controls');
+        this.$refs.video.src="https://assets14.ign.com/videos/zencoder/2020/02/21/1920/25f4e16785788e3ba92bb23b563d1e06-3906000-1582298169.mp4";
+
+  }, computed: {
   },
 }
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
+.controls {
+  z-index:9;
+  width:95%;
+  margin-left:2.5%;
+  height:20%;
+  margin-top:-5%;
+}
+button {
+  font-size:90%;
+  width:90%;
+  height:90%;
+}
+.progress-container {
+  width:100%;
+  transform: translate(.5%,-4vh);
+  height:.5vh;
+  background: rgb(149, 149, 149);
+	-moz-border-radius: 25px;
+	-webkit-border-radius: 25px;
+	border-radius: 25px;
+}
+.progress-container:hover {
+  width:100%;
+  transform: translate(.5%,-4.5vh);
+  height:1.25vh;
+  background: rgb(149, 149, 149);
+	-moz-border-radius: 25px;
+	-webkit-border-radius: 25px;
+	border-radius: 25px;
+}
+
+.finished {
+  display: block;
+  height: 100%;
+  border-top-right-radius: 8px;
+  border-bottom-right-radius: 8px;
+  border-top-left-radius: 20px;
+  border-bottom-left-radius: 20px;
+  background-color:rgb(255, 255, 255);
+  position: relative;
+  overflow: hidden;
+}
+.inmem {
+  display: block;
+  height: 100%;
+  transform:translateX(-2%);
+  border-top-right-radius: 8px;
+  border-bottom-right-radius: 8px;
+  border-top-left-radius: 20px;
+  border-bottom-left-radius: 20px;
+  background-color:#BF1313;
+  position: relative;
+  overflow: hidden;
+}
+.currentplace {
+  z-index:10;
+  height: 1.5vh;
+  transform: translateY(-25%);
+  background-color:#BF1313;
+  border-radius:100%;
+  width:1.5vh;
+  display:block;
+  border: .5vh solid white;
+  }
+
+  .progress-container:hover .currentplace {
+    height: 2.5vh;
+    width:2.5vh;
+    border: .7vh solid white;
+
+  }
 h3 {
   margin: 40px 0 0;
 }
