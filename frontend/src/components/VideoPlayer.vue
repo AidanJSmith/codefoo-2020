@@ -1,5 +1,5 @@
 <template>
-  <div class="vid-container">
+  <div class="vid-container" @mouseup="dragging=false;volumedrag=false" >
     <link rel="stylesheet" 
         href="https://use.fontawesome.com/releases/v5.2.0/css/all.css" 
         integrity="sha384-hWVjflwFxL6sNzntih27bfxkr27PmbbK/iSvJ+a4+0owXq79v+lsFkW54bOGbiDQ" 
@@ -13,19 +13,22 @@
      <video ref="video"  @click="changeVideoState('play')">
      </video>
      <div id="video-controls" class="controls" data-state="hidden">
-        <div class="progress-container columns is-mobile" ref="progress"  @mousemove="doDrag($event)" @mouseup="dragging=false"  @mousedown="dragging=true"  @click="setTime($event)">
+        <div class="progress-container columns is-mobile" ref="progress"  @mousemove="doDrag($event)"  @mousedown="dragging=true"  @click="setTime($event)">
           <span class="finished"  :style="`width:`+currentTime+'%;'"></span>
           <div class="currentplace"></div>
           <span  class="inmem" :style="`width:` + ((bufferedTime+currentTime)>=100 ? 100-currentTime : bufferedTime) +`%;`"></span>
         </div>
         <div class="columns">
-          <div class="columns">
-          <button id="playpause" @click="changeVideoState('play')" type="button" data-state="play">Play/Pause</button>
-          <button id="stop" type="button" @click="changeVideoState('stop')">Stop</button>
-          <button id="mute" type="button" data-state="mute">Mute/Unmute</button>
-          <button id="volinc" type="button" data-state="volup">Vol+</button>
-          <button id="voldec" type="button" data-state="voldown">Vol-</button>
-          <button id="fs" type="button" data-state="go-fullscreen">Fullscreen</button>
+          <div class="columns bottom">
+            <i @click="changeVideoState('play')"  :class="'fas bottom-icon ' + (playing ? `fa-play` : `fa-pause`)"></i>
+            <img src="../assets/Infinite.png" class="infinite bottom-icon">
+            <div class="volume">
+              <i @click="changeVideoState('mute')"  :class="'fas bottom-icon fa-volume-up'"></i>
+              <div class="volume-bar columns is-mobile" ref="volume" @mousemove="doDrag($event)"  @mousedown="volumedrag=true"  @click="setVolume($event)">
+                <span class="finished"  :style="`width:`+(volume-10)+'%;'"></span>
+                <div class="currentplace"></div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -44,7 +47,10 @@ export default {
       isMounted:false,
       currentTime:0,
       dragging:false,
+      volumedrag:false,
       bufferedTime:0,
+      playing:false,
+      volume:100,
     }
   },
   methods: {
@@ -52,6 +58,7 @@ export default {
       const video=this.$refs.video;
       this.currentTime= 100*video.currentTime/video.duration;
       let buff=video.buffered
+      this.playing=video.paused;
       if(buff.length) {
         let x= this.bufferedTime
         this.bufferedTime= 100*(-1*buff.start(buff.length-1)+buff.end(buff.length-1))/video.duration;
@@ -63,18 +70,27 @@ export default {
     },
     setTime(event) {
       const video=this.$refs.video;
-      console.log(event.clientX -  this.$refs.progress.getBoundingClientRect().left + "   " +this.$refs.progress.getBoundingClientRect().width);
       video.currentTime=video.duration*(event.clientX -  this.$refs.progress.getBoundingClientRect().left)/this.$refs.progress.getBoundingClientRect().width;
    },
    stopDrag() {
      this.dragging=false;
+     this.volumedrag=false;
    },
    doDrag(event) {
       const video=this.$refs.video;
+      if (this.volumedrag) {
+        this.volume=100*(Math.abs(this.$refs.volume.getBoundingClientRect().left - event.clientX)/this.$refs.volume.getBoundingClientRect().width).toFixed(1);
+        video.volume=this.volume/100;
+      }
       if (this.dragging) {
         console.log(event.clientX -  this.$refs.progress.getBoundingClientRect().left + "   " +this.$refs.progress.getBoundingClientRect().width);
          video.currentTime=video.duration*(event.clientX -  this.$refs.progress.getBoundingClientRect().left)/this.$refs.progress.getBoundingClientRect().width;
       }
+   },
+   setVolume(event) {
+     const video=this.$refs.video;
+     this.volume=100*(Math.abs(this.$refs.volume.getBoundingClientRect().left - event.clientX)/this.$refs.volume.getBoundingClientRect().width).toFixed(1);
+     video.volume=this.volume/100;
    },
     changeVideoState(state) {
       const video=this.$refs.video;
@@ -84,10 +100,10 @@ export default {
         } else {
           video.pause();
         }
-      }
-      if(state=='stop') {
+      } else if(state=='stop') {
         video.currentTime=20;
-
+      } else if(state=='mute') {
+        this.volume=0;
       }
       }
     }, mounted () {
@@ -121,12 +137,44 @@ button {
   width:90%;
   height:90%;
 }
+.bottom-icon {
+  color:white;
+  font-size:1.3em;
+  transform:translate(120%,12%);
+  cursor:pointer;
+}
+.infinite {
+  width:5%;
+  height:100%;
+  font-size:.2em !important;
+  transform:translate(90%,10%);
+}
+.volume {
+  transform: translate(150%,10%);
+  font-size:1em;
+}
+.volume-bar {
+  width:300%;
+  transform: translate(100%,-40%);
+  height:.3vh;
+  background: rgb(149, 149, 149);
+	-moz-border-radius: 25px;
+	-webkit-border-radius: 25px;
+	border-radius: 25px;
+  white-space: nowrap;
+  flex-wrap: false;  
+  cursor:pointer;
+}
+.bottom {
+  transform:translate(0%,-10%);
+}
+
 .toptitle {
   color:white;    
   font-size:1.1em;
   transform: translate(-3%, -375%);
   -webkit-text-stroke-width: .01vh;
-  -webkit-text-stroke-color: white;
+  -webkit-text-stroke-color: #B0AFAF;
   
 }
 .share {
@@ -151,7 +199,7 @@ button {
 
 .topbar {
 
-  transform: translate(5%,515%);
+  transform: translate(5%,485%);
   width:100%;
 }
 video {
@@ -204,45 +252,32 @@ video {
 
    @media (min-width: 0px) { 
     .toptitle {
-      font-size:3.5vw;
-      transform: translate(-3%, -430%);
+      font-size:3em;
+      transform: translate(-3%, -390%);
 
     }
     .share {
-      font-size:1.25em;
-      transform: translate(40%,-430%);
+      font-size:3.25em;
+      transform: translate(60%,-390%);
 
     }
    }
-     @media (min-width:500px) { 
-      .toptitle {
-        font-size:2.5vw;
-        transform: translate(-3%, -430%);
-
-      }
-      .share {
-        font-size:1.25em;
-        transform: translate(65%,-430%);
-
-      }
-    }
     @media (min-width: 763px) { 
       .toptitle {
-        font-size:1em;
+        font-size:1.75em;
         
       }
       .share {
-        font-size:1.25em;
+        font-size:2em;
       }
     }
    @media (min-width: 1025px) { 
       .toptitle {
-        font-size:1.25em;
+        font-size:1.5em;
         
       }
       .share {
         font-size:1.75em;
-        transform: translate(55%,-430%);
       }
    }
    @media (min-width: 1274px) { 
@@ -252,10 +287,6 @@ video {
       }
       .share {
         font-size:1.5em;
-        transform: translate(55%,-430%);
-      }
-      .topbar {
-         transform: translate(5%,535%);
       }
    }
 </style>

@@ -153,6 +153,7 @@ hr {
 .root {
     position: sticky;
     top:0;
+
 }
 .card-image {
     border-radius: .5vw;
@@ -174,6 +175,7 @@ hr {
 }
 .load-btn {
     background-color: #BF1313;
+    transform: translateY(-40%);
     width:110%;
     height:2.5em;
     color:white;
@@ -303,7 +305,7 @@ hr {
     }
    @media (min-width: 1500px) { 
        .root {
-                width: 81%;
+                width: 74%;
               }
     .card-time {
         position: absolute;
