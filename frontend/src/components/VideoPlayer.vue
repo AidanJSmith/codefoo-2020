@@ -123,7 +123,7 @@ button {
 }
 .toptitle {
   color:white;    
-  font-size:1.1vw;
+  font-size:1.1em;
   transform: translate(-3%, -375%);
   -webkit-text-stroke-width: .01vh;
   -webkit-text-stroke-color: white;
@@ -131,7 +131,7 @@ button {
 }
 .share {
   color:white;    
-  font-size:1.5vw;
+  font-size:1.5em;
   transform: translate(60%,-375%);
   -webkit-text-stroke-width: .04vh;
   -webkit-text-stroke-color: white;
@@ -151,11 +151,11 @@ button {
 
 .topbar {
 
-  transform: translate(5%,485%);
+  transform: translate(5%,515%);
   width:100%;
 }
 video {
-  border-radius:.6vw;
+  border-radius:.6em;
 }
 
 .finished {
@@ -204,41 +204,58 @@ video {
 
    @media (min-width: 0px) { 
     .toptitle {
-      font-size:3vw;
-      transform: translate(-3%, -390%);
+      font-size:3.5vw;
+      transform: translate(-3%, -430%);
 
     }
     .share {
-      font-size:3.25vw;
-      transform: translate(60%,-390%);
+      font-size:1.25em;
+      transform: translate(40%,-430%);
 
     }
    }
+     @media (min-width:500px) { 
+      .toptitle {
+        font-size:2.5vw;
+        transform: translate(-3%, -430%);
+
+      }
+      .share {
+        font-size:1.25em;
+        transform: translate(65%,-430%);
+
+      }
+    }
     @media (min-width: 763px) { 
       .toptitle {
-        font-size:1.75vw;
+        font-size:1em;
         
       }
       .share {
-        font-size:2vw;
+        font-size:1.25em;
       }
     }
    @media (min-width: 1025px) { 
       .toptitle {
-        font-size:1.5vw;
+        font-size:1.25em;
         
       }
       .share {
-        font-size:1.75vw;
+        font-size:1.75em;
+        transform: translate(55%,-430%);
       }
    }
    @media (min-width: 1274px) { 
       .toptitle {
-        font-size:1.1vw;
+        font-size:1.1em;
         
       }
       .share {
-        font-size:1.5vw;
+        font-size:1.5em;
+        transform: translate(55%,-430%);
+      }
+      .topbar {
+         transform: translate(5%,535%);
       }
    }
 </style>

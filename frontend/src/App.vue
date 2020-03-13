@@ -1,11 +1,11 @@
 <template>
   <div id="app" class="container">
     <div v-if="screen>=1100">
-    <div class="columns">
-      <div class="column is-four-fifths player">
+    <div class="columns vidart">
+      <div class="column player">
         <VideoPlayer/>
         <div class="columns">
-          <b class="title is-size-1 column">World's Coolest Lorem Ipsum</b>
+          <b class="title is-size-2 column">World's Coolest Lorem Ipsum</b>
         </div>
         <div class="columns">
           <div class="body column">Look at all of this great, fascinating text that I'm goingok at all of this great, fascinating>Look at all of this great, fascinating text that I'm goingok at all of this great, fascinating>Look at all of this great, fascinating text that I'm goingok at all of this great, fascinating>Look at all of this great, fascinating text that I'm goingok at all of this great, fascinating>Look at all of this great, fascinating text that I'm goingok at all of this great, fascinating>Look at all of this great, fascinating text that I'm goingok at all of this great, fascinating>Look at all of this great, fascinating text that I'm goingok at all of this great, fascinating>Look at all of this great, fascinating text that I'm goingok at all of this great, fascinating>Look at all of this great, fascinating text that I'm goingok at all of this great, fascinating>Look at all of this great, fascinating text that I'm goingok at all of this great, fascinating>Look at all of this great, fascinating text that I'm goingok at all of this great, fascinating>Look at all of this great, fascinating text that I'm goingok at all of this great, fascinating>Look at all of this great, fascinating text that I'm goingok at all of this great, fascinating>Look at all of this great, fascinating text that I'm goingok at all of this great, fascinating text that I'm goingok at all of this great, fascinating text that I'm goingok at all of this great, fascinating text that I'm goingok at all of this great, fascinating text that I'm goingok at all of this great, fascinating text that I'm going to read right now. I sure do love reading all of this text.</div>
@@ -18,7 +18,7 @@
   </div>
   <div v-else>
       <div class="columns">
-      <div class="column is-four-fifths player">
+      <div class="column player">
         <VideoPlayer/>
         <div class="columns">
           <b class="title is-size-1 column">World's Coolest Lorem Ipsum</b>
@@ -82,18 +82,17 @@ export default {
   margin-top: 10vh;
   text-rendering: optimizeLegibility;
   -moz-user-select: none;
-}
-video {
-  width:110%;
+  width: 100vw;
 }
 
+
 .body {
-  font-size:1.5em;
+  font-size:1.3em;
   margin-top:-.2em;
   line-height:1.4;
 }
 .title {
-  margin-top:1.75em;
+  margin-top:1.4em;
   font-family:  'Open Sans', 'Helvetica Neue', sans-serif, sans-serif;
   -webkit-text-stroke-width: .1vh;
   -webkit-text-stroke-color: rgb(#363636);
@@ -106,7 +105,7 @@ video {
             margin-left:0%;
           }
     video {
-      width:110%
+      width:150%
     }
    /* Medium devices (tablets, 768px and up) */
   @media (min-width: 768px) { 
@@ -134,7 +133,9 @@ video {
 
    @media (min-width: 1700px) { 
     #app {
-                margin-left:10%;
+                margin-left:15%;
+                transform: scale(1.2);
+                margin-top:30vh;
               }
    }
 </style>

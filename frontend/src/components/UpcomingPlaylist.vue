@@ -1,5 +1,5 @@
 <template>
-    <div class=" root">
+    <div class="root">
         <div v-if="screen>=1100">
             <div class="columns">
                 <div class="column card-image" style="background-image:">   
@@ -134,7 +134,7 @@ export default {
     computed : {
         styleTime() {
 
-        return "right:"+window.innerWidth*.0076+5+"%;";
+        return "right:"+window.innerWidth*.008+5+"%;";
         },
     },
 
@@ -165,7 +165,7 @@ hr {
     max-width:100%;
 }
 .playlist-header {
-    font-size:1.2em;
+    font-size:1.1em;
     -webkit-text-stroke-width: .03vh;
     -webkit-text-stroke-color:#3F4144;
     margin-top:.25em;
@@ -174,13 +174,13 @@ hr {
 }
 .load-btn {
     background-color: #BF1313;
-    width:103%;
-    height:2.7em;
+    width:110%;
+    height:2.5em;
     color:white;
-    border-radius:.4vw;
+    border-radius:.2vw;
     border:none;
-    font-size:1.25em;
-    -webkit-text-stroke-width: .06vh;
+    font-size:1em;
+    -webkit-text-stroke-width: .01vh;
     -webkit-text-stroke-color: white;
     user-select: none;
     outline: none;
@@ -195,13 +195,13 @@ hr {
     z-index: 99;
     color:white;
     font-size:.65vw;
-    padding:.2em;
+    padding:-.2em;
     padding-left:.4em;
     padding-right:.4em;
     -webkit-text-stroke-width: .06vh;
     -webkit-text-stroke-color: white;
-    background-color:#3F4144;
-    margin-top:32.5%;
+    background-color:rgba(63, 65, 68, 0.651);
+    margin-top:20.5%;
 }
 .card-time-lg {
     position: absolute;
@@ -229,6 +229,19 @@ hr {
             top:80%;
             left:80%;
         }
+    .card-time {
+        position: absolute;
+        z-index: 99;
+        color:white;
+        font-size:.85vw;
+        padding:.2em;
+        padding-left:.4em;
+        padding-right:.4em;
+        -webkit-text-stroke-width: .06vh;
+        -webkit-text-stroke-color: white;
+        background-color:#3F4144;
+        margin-top:32.5%;
+    }
    }
 
    /* Large devices (desktops, 992px and up) */
@@ -240,13 +253,26 @@ hr {
 
    @media (min-width: 1220px) { 
        .root {
-                width: 70%;
+                width: 80%;
               }
+    .card-time {
+        position: absolute;
+        z-index: 99;
+        color:white;
+        font-size:.85vw;
+        padding:.2em;
+        padding-left:.4em;
+        padding-right:.4em;
+        -webkit-text-stroke-width: .06vh;
+        -webkit-text-stroke-color: white;
+        background-color:#3F4144;
+        margin-top:32.5%;
+    }
     
    }
    @media (min-width: 1260px) { 
        .root {
-                width: 100%;
+                width: 80%;
               }
     
    }
@@ -255,18 +281,42 @@ hr {
        .root {
                 width: 80%;
               }
-    
+        .card-time {
+        position: absolute;
+        z-index: 99;
+        color:white;
+        font-size:.9vw;
+        padding:.2em;
+        padding-left:.4em;
+        padding-right:.4em;
+        -webkit-text-stroke-width: .06vh;
+        -webkit-text-stroke-color: white;
+        background-color:#3F4144;
+        margin-top:32.5%;
+      }
    }
     @media (min-width: 1420) { 
     .root {
-            width: 50%;
+            width: 80%;
             }
 
     }
    @media (min-width: 1500px) { 
        .root {
-                width: 100%;
+                width: 81%;
               }
-    
+    .card-time {
+        position: absolute;
+        z-index: 99;
+        color:white;
+        font-size:.65em;
+        padding:.1em;
+        padding-left:.4em;
+        padding-right:.4em;
+        -webkit-text-stroke-width: .06vh;
+        -webkit-text-stroke-color: white;
+        background-color:#3F4144;
+        margin-top:32.5%;
+    }
    }
 </style>
