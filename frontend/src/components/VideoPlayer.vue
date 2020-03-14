@@ -23,7 +23,7 @@
             <i @click="changeVideoState('play')"  :class="'fas bottom-icon ' + (playing ? `fa-play` : `fa-pause`)"></i>
             <img src="../assets/Infinite.png" class="infinite bottom-icon">
             <div class="volume">
-              <i @click="changeVideoState('mute')"  :class="'fas bottom-icon speaker '+speakerType"></i>
+              <i @click="changeVideoState('mute')"  :class="'fas bottom-icon speaker fa-volume-up'"></i>
               <div class="volume-bar columns is-mobile" ref="volume" @mousemove="doDrag($event)"  @mousedown="volumedrag=true"  @click="setVolume($event)">
                 <span class="finished"  :style="`width:`+(volume-10)+'%;'"></span>
                 <div class="currentplace"></div>
@@ -284,6 +284,7 @@ video {
   border-radius:100%;
   width:1.75vh;
   display:block;
+  cursor:pointer;
   border: .51vh solid white;
   }
 
@@ -297,23 +298,36 @@ video {
 
    @media (min-width: 0px) { 
     .toptitle {
-      font-size:3em;
+      font-size:1em;
       transform: translate(-3%, -390%);
 
     }
     .share {
-      font-size:3.25em;
-      transform: translate(60%,-390%);
+      font-size:1.25em;
+      transform: translate(30%,-390%);
 
+    }
+    .bottom {
+        transform:translate(0%,-80%);
+    }
+    .infinite {
+      width:16em;
+      font-size:.2em !important;
+      transform:translate(80%,10%);
     }
    }
     @media (min-width: 763px) { 
       .toptitle {
-        font-size:1.75em;
+        font-size:1.25em;
         
       }
       .share {
-        font-size:2em;
+        font-size:1.5em;
+        transform: translate(60%,-390%);
+
+      }
+      .bottom {
+        transform:translate(0%,-20%);
       }
     }
    @media (min-width: 1025px) { 
