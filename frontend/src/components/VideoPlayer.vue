@@ -19,16 +19,17 @@
           <span  class="inmem" :style="`width:` + ((bufferedTime+currentTime)>=100 ? 100-currentTime : bufferedTime) +`%;`"></span>
         </div>
         <div class="columns">
-          <div class="columns bottom">
+          <div class="columns is-mobile bottom">
             <i @click="changeVideoState('play')"  :class="'fas bottom-icon ' + (playing ? `fa-play` : `fa-pause`)"></i>
             <img src="../assets/Infinite.png" class="infinite bottom-icon">
             <div class="volume">
-              <i @click="changeVideoState('mute')"  :class="'fas bottom-icon fa-volume-up'"></i>
+              <i @click="changeVideoState('mute')"  :class="'fas bottom-icon speaker '+speakerType"></i>
               <div class="volume-bar columns is-mobile" ref="volume" @mousemove="doDrag($event)"  @mousedown="volumedrag=true"  @click="setVolume($event)">
                 <span class="finished"  :style="`width:`+(volume-10)+'%;'"></span>
                 <div class="currentplace"></div>
               </div>
             </div>
+          <div class="time-text">{{Math.round(currentTime/60)}}:{{(Math.round(currentTime%60)/100).toFixed(2).slice(2,4)}} / {{Math.round(endTime/60)}}:{{(Math.round(endTime%60)/100).toFixed(2).slice(2,4)}}  </div>
           </div>
         </div>
       </div>
@@ -49,12 +50,17 @@ export default {
       dragging:false,
       volumedrag:false,
       bufferedTime:0,
+      lastvolume:100,
       playing:false,
       volume:100,
+      endTime:0,
     }
   },
   methods: {
     changeTime() {
+      if(!this.endTime) {
+        this.changeEndTime()
+      }
       const video=this.$refs.video;
       this.currentTime= 100*video.currentTime/video.duration;
       let buff=video.buffered
@@ -103,8 +109,19 @@ export default {
       } else if(state=='stop') {
         video.currentTime=20;
       } else if(state=='mute') {
-        this.volume=0;
+        if(video.volume==.1) {
+          this.volume=this.lastvolume;
+          video.volume=this.volume/100;
+        } else {
+          this.lastvolume=this.volume;
+          this.volume=10;
+          video.volume=.1;
+        }
+
       }
+      },
+      changeEndTime() {
+        this.endTime=this.$refs.video.duration-60-6;
       }
     }, mounted () {
         setInterval(this.changeTime(),20);
@@ -112,8 +129,18 @@ export default {
         this.isMounted=true;
         this.$refs.video.removeAttribute('controls');
         this.$refs.video.src="https://assets14.ign.com/videos/zencoder/2020/02/21/1920/25f4e16785788e3ba92bb23b563d1e06-3906000-1582298169.mp4";
-
+        this.changeEndTime()
   }, computed: {
+    speakerType() {
+      switch(true) {
+        case(this.volume>=50):
+          return "fa-volume-up";
+        case(this.volume==10):
+          return "fa-volume-mute";
+        default:
+          return "fa-volume-down";
+      }
+    }
   },
 }
 </script>
@@ -142,6 +169,21 @@ button {
   font-size:1.3em;
   transform:translate(120%,12%);
   cursor:pointer;
+  display:inline-block;
+
+}
+.time-text {
+  color:white;
+  font-size:.8em;
+  transform:translate(250%,40%);
+}
+.speaker {
+  font-size:1.5em;
+}
+
+.fa-volume-down {
+  transform:translate(200%,10%) !important;
+  font-size:1.75em;
 }
 .infinite {
   width:5%;
@@ -150,13 +192,15 @@ button {
   transform:translate(90%,10%);
 }
 .volume {
-  transform: translate(150%,10%);
-  font-size:1em;
+  transform: translate(120%,10%);
+}
+.volume-bar .fa-volume-downmod {
+    transform: translate(290%,-40%) !important;
 }
 .volume-bar {
   width:300%;
   transform: translate(100%,-40%);
-  height:.3vh;
+  height:10%;
   background: rgb(149, 149, 149);
 	-moz-border-radius: 25px;
 	-webkit-border-radius: 25px;
@@ -164,6 +208,7 @@ button {
   white-space: nowrap;
   flex-wrap: false;  
   cursor:pointer;
+  
 }
 .bottom {
   transform:translate(0%,-10%);
