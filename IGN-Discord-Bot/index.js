@@ -33,25 +33,37 @@ client.on('message', message => {
                     description:".search-item-description"
                 })
             })(function(err, obj) { 
-                obj.props.title.url=obj.props.title.url.replace(/ /g,'_')
-                
-                x(obj.props.title.url,".image@src").then(function(q) {   
-                    let url = q!=null ? new URL(`https://`+new URL(q).hostname+new URL(q).pathname).toString() : '';
-                    
-                    message.channel.send(new Discord.MessageEmbed()
-                    .setColor('#D3222A')
-                    .setTitle(obj.props.title.text)
-                    .setURL(obj.props.title.url)
-                    .setDescription(obj.props.description)
-                    .setImage(url)
-                    .addFields(
-                        { name: 'Wiki', value: `[${obj.props.subtitle.text}](${obj.props.subtitle.link})`},
-                    )
-                    .setFooter('Bot by Aidan Smith. V1'))
-                    
-                }).catch(function(err) {
-                    console.log(err) // handle error in promise
-                  })
+                if (obj.title.url!=undefined) {
+                    obj.props.title.url=obj.props.title.url.replace(/ /g,'_');
+                    x(obj.props.title.url,".image@src").then(function(q) {
+                            let url =  new URL(`https://`+new URL(q).hostname+new URL(q).pathname).toString();
+                            
+                            message.channel.send(new Discord.MessageEmbed()
+                            .setColor('#D3222A')
+                            .setTitle(obj.props.title.text)
+                            .setURL(obj.props.title.url)
+                            .setDescription(obj.props.description)
+                            .setImage(url)
+                            .addFields(
+                                { name: 'Wiki', value: `[${obj.props.subtitle.text}](${obj.props.subtitle.link})`},
+                            )
+                            .setFooter('Bot by Aidan Smith. V1')) 
+                        
+                    }).catch(function(err) {
+                        console.log(err==false ? "No Image Found" : err);
+                        message.channel.send(new Discord.MessageEmbed()
+                                .setColor('#D3222A')
+                                .setTitle(obj.props.title.text)
+                                .setURL(obj.props.title.url)
+                                .setDescription(obj.props.description)
+                                .addFields(
+                                    { name: 'Wiki', value: `[${obj.props.subtitle.text}](${obj.props.subtitle.link})`},
+                                )
+                                .setFooter('Bot by Aidan Smith. V1'))
+                    }) } else {
+                        message.channel.send("Query not found.");
+                    }
+
                 
             })
              /*
