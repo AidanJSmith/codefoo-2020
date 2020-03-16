@@ -12,7 +12,9 @@ function applyFilter(query, filter = "all") {
     url.searchParams.set('q', query);
     url.searchParams.set('count', 10);
     url.searchParams.set('filter', filter);
-    url.searchParams.set('type', filter);
+    if(filter!="all") {
+     url.searchParams.set('type', filter);
+    }
     return url;
 }
 
@@ -163,16 +165,25 @@ function wikiEmbed(message, place = 1, mode = "default", editmessage = "null") {
 
     })
 }
+function getScore(message) {
+    console.log((message.content.slice(9) + " review").toString());
+    x(applyFilter(message.content.slice(9) + " review").toString(), [".review-score"])(function(err,obj) {
+        let highest=-1;
+        for (let item of obj) {
+            highest=item.trim()>highest ? item.trim() : highest;
+        }
+        console.log(highest);
+    })
+}
 client.once('ready', () => {
     console.log('Active.');
 });
 client.on('message', message => {
-    console.log(message.content);
     if (message.content.startsWith(`${prefix}`)) {
         if (message.content.startsWith(`${prefix} wiki`)) {
-            wikiEmbed(message);
-        } else if (message.content.startsWith(`${prefix} video `)) {
-            message.channel.send('Just search for video');
+            wikiEmbed(message); //Search the wiki for a message
+        } else if (message.content.startsWith(`${prefix} rate`)) {
+            getScore(message);
         } else if (message.content.startsWith(`${prefix} game`)) {
             message.channel.send('Just search the games');
         } else {
