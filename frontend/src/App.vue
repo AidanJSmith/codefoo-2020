@@ -38,13 +38,13 @@
 /*To-Do:
 Fix time code.
 Integrate the API... when I have time.
-Start fixing the player and making it look nice.
-
+Add sidebar buttons to player, make them go away when the display goes full screen... have them do nothing for now.
 
 */
 import './../node_modules/bulma/css/bulma.css';
 import UpcomingPlaylist from './components/UpcomingPlaylist';
 import VideoPlayer from './components/VideoPlayer';
+
 export default {
   name: 'App',
   components: {
@@ -58,12 +58,17 @@ export default {
   methods: {
     onResize() {
       this.screen=window.innerWidth; 
+    },
+    getData() {
+
     }
   },
   mounted() {
     // Register an event listener when the Vue component is ready
     this.screen=window.innerWidth;
-    window.addEventListener('resize', this.onResize)
+    window.addEventListener('resize', this.onResize);
+    setTimeout(this.getData(),20);
+
   },
   beforeDestroy() {
     // Unregister the event listener before destroying this Vue instance
