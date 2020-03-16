@@ -25,13 +25,13 @@ function reactAwaitEdit(originalmessage, message, place, max) {
     if (place == 1) {
         message.react(`➡️`).then(message.awaitReactions(filter, {
                 max: 1,
-                time: 60000,
+                time: 1800000,
                 errors: ['time']
             })
             .then(collected => {
                 const reaction = collected.first();
                 if (reaction.emoji.name === '➡️') {
-                    wikiEmbed(originalmessage,place+1,"edit",message);
+                    wikiEmbed(originalmessage, place + 1, "edit", message);
                 } else {
                     message.channel.send('you reacted with left');
                 }
@@ -42,21 +42,21 @@ function reactAwaitEdit(originalmessage, message, place, max) {
     } else {
         if (max > 1) {
             message.react('⬅️').then(max != place ? message.react('➡️') : '').then(message.awaitReactions(filter, {
-                max: 1,
-                time: 60000,
-                errors: ['time']
-            })
-            .then(collected => {
-                const reaction = collected.first();
-                if (reaction.emoji.name === '➡️') {
-                    wikiEmbed(originalmessage,place+1,"edit",message);
-                } else {
-                    wikiEmbed(originalmessage,place-1,"edit",message);
-                }
-            })
-            .catch(collected => {
-                console.log(`Reaction: (${collected[0]})`);
-            }));
+                    max: 1,
+                    time: 1800000,
+                    errors: ['time']
+                })
+                .then(collected => {
+                    const reaction = collected.first();
+                    if (reaction.emoji.name === '➡️') {
+                        wikiEmbed(originalmessage, place + 1, "edit", message);
+                    } else {
+                        wikiEmbed(originalmessage, place - 1, "edit", message);
+                    }
+                })
+                .catch(collected => {
+                    console.log(`Reaction: (${collected[0]})`);
+                }));
         }
     }
 
@@ -115,7 +115,7 @@ function wikiEmbed(message, place = 1, mode = "default", editmessage = "null") {
                 })
             }
             if (mode == "default") {
-            x(obj.props.title.url, ".image@src").then(function (q) {
+                x(obj.props.title.url, ".image@src").then(function (q) {
                     let url = new URL(`https://` + new URL(q).hostname + new URL(q).pathname).toString();
                     const embed = new Discord.MessageEmbed()
                         .setColor('#D3222A')
@@ -132,29 +132,30 @@ function wikiEmbed(message, place = 1, mode = "default", editmessage = "null") {
                         while (message.channel.lastMessage == message) {
                             console.log("");
                         }
-                        reactAwaitEdit(message,message.channel.lastMessage, place, max);
+                        reactAwaitEdit(message, message.channel.lastMessage, place, max);
                     });
-                
-            }).catch(function () {
-                console.log("No image found");
-                if (mode == "default") {
-                    message.channel.send(new Discord.MessageEmbed()
-                        .setColor('#D3222A')
-                        .setTitle(obj.props.title.text)
-                        .setURL(obj.props.title.url)
-                        .setDescription(obj.props.description)
-                        .addFields({
-                            name: 'Wiki',
-                            value: `[${obj.props.subtitle.text}](${obj.props.subtitle.link})`
-                        }, )
-                        .setFooter('Bot by Aidan Smith. v1.1')).then(function () {
+
+                }).catch(function () {
+                    console.log("No image found");
+                    if (mode == "default") {
+                        message.channel.send(new Discord.MessageEmbed()
+                            .setColor('#D3222A')
+                            .setTitle(obj.props.title.text)
+                            .setURL(obj.props.title.url)
+                            .setDescription(obj.props.description)
+                            .addFields({
+                                name: 'Wiki',
+                                value: `[${obj.props.subtitle.text}](${obj.props.subtitle.link})`
+                            }, )
+                            .setFooter('Bot by Aidan Smith. v1.1')).then(function () {
                             while (message.channel.lastMessage == message) {
                                 console.log("");
                             }
-                            reactAwaitEdit(message,message.channel.lastMessage, place, max);
+                            reactAwaitEdit(message, message.channel.lastMessage, place, max);
                         });
-                }
-            })}
+                    }
+                })
+            }
         } else {
             message.channel.send("Query not found.");
         }
