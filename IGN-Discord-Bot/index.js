@@ -1,3 +1,4 @@
+const Canvas = require('canvas');
 const Discord = require('discord.js');
 const {
     prefix,
@@ -167,12 +168,29 @@ function wikiEmbed(message, place = 1, mode = "default", editmessage = "null") {
 }
 function getScore(message) {
     console.log((message.content.slice(9) + " review").toString());
-    x(applyFilter(message.content.slice(9) + " review").toString(), [".review-score"])(function(err,obj) {
+    x(applyFilter(message.content.slice(9) + " review").toString(), [".review-score"])(async function(err,obj) {
         let highest=-1;
         for (let item of obj) {
             highest=item.trim()>highest ? item.trim() : highest;
         }
-        console.log(highest);
+        const canvas = Canvas.createCanvas(542, 614);
+        const ctx = canvas.getContext('2d');
+        // Since the image takes time to load, you should await it
+        let img =  await Canvas.loadImage('./assets/ign.png');
+         // This uses the canvas dimensions to stretch the image onto the entire canvas
+        ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+        ctx.font = "240px Arial";
+        ctx.fillStyle = "white";
+        ctx.textAlign = "center"
+        if(parseInt(highest,10)>0||"fifa" in message ||"madden" in message||"nba2k" in message) { // These games get -1s... I'm not biased?
+        ctx.fillText(parseFloat(highest,10).toPrecision(2),  canvas.width/2, canvas.height/1.6)
+            // Use helpful Attachment class structure to process the file for you
+            const attachment = new Discord.MessageAttachment(canvas.toBuffer(), 'welcome-image.png');
+            message.channel.send(attachment);
+            console.log(parseFloat(highest,10));
+        } else {
+            message.channel.send("Not found.");
+        }
     })
 }
 client.once('ready', () => {
