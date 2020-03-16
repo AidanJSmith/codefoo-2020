@@ -33,18 +33,17 @@ client.on('message', message => {
                     description:".search-item-description"
                 })
             })(function(err, obj) { 
-                obj.props.title.url.replace(/ /g,'_')
+                obj.props.title.url=obj.props.title.url.replace(/ /g,'_')
                 
                 x(obj.props.title.url,".image@src").then(function(q) {   
-                    console.log(q);
-                    //let url = q!=null ? new URL(`https://`+new URL(q).hostname+new URL(q).pathname).toString() : '';
+                    let url = q!=null ? new URL(`https://`+new URL(q).hostname+new URL(q).pathname).toString() : '';
                     
                     message.channel.send(new Discord.MessageEmbed()
                     .setColor('#D3222A')
                     .setTitle(obj.props.title.text)
                     .setURL(obj.props.title.url)
                     .setDescription(obj.props.description)
-                    .setImage('')
+                    .setImage(url)
                     .addFields(
                         { name: 'Wiki', value: `[${obj.props.subtitle.text}](${obj.props.subtitle.link})`},
                     )
