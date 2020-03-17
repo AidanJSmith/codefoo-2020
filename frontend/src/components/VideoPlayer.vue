@@ -6,7 +6,7 @@
         crossorigin="anonymous">
      <div class="topbar" data-state="hidden">
         <div class="columns is-mobile" ref="progress">
-            <div class="toptitle column is-8">Lorem Ipsum Dolor Set Amit</div>
+            <div class="toptitle column is-8">{{truncate(title)}}</div>
             <i class="fas fa-share share column is-4"></i>
         </div>
     </div>
@@ -55,9 +55,17 @@ export default {
       playing:false,
       volume:100,
       endTime:0,
+      title:"Loading..."
     }
   },
   methods: {
+     truncate(string) {
+            if(string.length<=60) {
+                return string
+            } else {
+                return string.split('').slice(0,57).join('')+"...";
+            }
+    },
     changeTime() {
       if(!this.endTime) {
         this.changeEndTime()
@@ -93,7 +101,6 @@ export default {
         video.volume=this.volume/100;
       }
       if (this.dragging) {
-        console.log(event.clientX -  this.$refs.progress.getBoundingClientRect().left + "   " +this.$refs.progress.getBoundingClientRect().width);
          video.currentTime=video.duration*(event.clientX -  this.$refs.progress.getBoundingClientRect().left)/this.$refs.progress.getBoundingClientRect().width;
       }
    },
@@ -140,6 +147,7 @@ export default {
         this.$refs.video.load()
         if(this.currentIndex!=0) this.changeVideoState("play");
         this.changeEndTime();
+        this.title=this.video.metadata.title;
     }
   },
   computed: {

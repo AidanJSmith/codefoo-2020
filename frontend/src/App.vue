@@ -5,10 +5,10 @@
       <div class="column player">
         <VideoPlayer :video="videos[currentIndex]" :currentIndex="currentIndex"  @nextVideo="nextVideo()"/>
         <div class="columns">
-          <b class="title is-size-2 column">World's Coolest Lorem Ipsum</b>
+          <b class="title is-size-2 column">{{title}}</b>
         </div>
         <div class="columns">
-          <div class="body column">Look at all of this great, fascinating text that I'm goingok at all of this great, fascinating>Look at all of this great, fascinating text that I'm goingok at all of this great, fascinating>Look at all of this great, fascinating text that I'm goingok at all of this great, fascinating>Look at all of this great, fascinating text that I'm goingok at all of this great, fascinating>Look at all of this great, fascinating text that I'm goingok at all of this great, fascinating>Look at all of this great, fascinating text that I'm goingok at all of this great, fascinating>Look at all of this great, fascinating text that I'm goingok at all of this great, fascinating>Look at all of this great, fascinating text that I'm goingok at all of this great, fascinating>Look at all of this great, fascinating text that I'm goingok at all of this great, fascinating>Look at all of this great, fascinating text that I'm goingok at all of this great, fascinating>Look at all of this great, fascinating text that I'm goingok at all of this great, fascinating>Look at all of this great, fascinating text that I'm goingok at all of this great, fascinating>Look at all of this great, fascinating text that I'm goingok at all of this great, fascinating>Look at all of this great, fascinating text that I'm goingok at all of this great, fascinating text that I'm goingok at all of this great, fascinating text that I'm goingok at all of this great, fascinating text that I'm goingok at all of this great, fascinating text that I'm goingok at all of this great, fascinating text that I'm going to read right now. I sure do love reading all of this text.</div>
+          <div class="body column">{{body}}</div>
         </div>
      </div>
     <div class="column playlist is-4">
@@ -54,6 +54,8 @@ export default {
       screen: 0,
       currentIndex:0,
       videos:[],
+      title:"Loading...",
+      body:"Loading..."
     }
   },
   methods: {
@@ -77,13 +79,23 @@ export default {
     const url = "https://ign-apis.herokuapp.com/videos?startIndex=0&count=10"; // site that doesn’t send Access-Control-*
     fetch(proxyurl + url) // Stackoverflow found me this proxy site... Last I worked with heroku, I forgot of this suffering.
     .then(response => (response.text()))
-    .then(contents => this.videos=JSON.parse(contents).data)
+    .then(contents => {
+      this.videos=JSON.parse(contents).data;
+      this.title=this.videos[this.currentIndex].metadata.title;
+      this.body=this.videos[this.currentIndex].metadata.description;
+    })
     .catch(() => console.log("Can’t access " + url + " response. Blocked by browser?"))
 
   },
   beforeDestroy() {
     // Unregister the event listener before destroying this Vue instance
     window.removeEventListener('resize', this.onResize)
+  },
+  watch : {
+    currentIndex() {
+      this.title=this.videos[this.currentIndex].metadata.title;
+      this.body=this.videos[this.currentIndex].metadata.description;
+    }
   }
 }
 </script>

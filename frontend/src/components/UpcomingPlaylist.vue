@@ -124,7 +124,7 @@ export default {
 
         },
         update() {
-            if(this.index+3<=this.cards.length) {
+            if(this.index+4<=this.cards.length) {
                 this.currentcards=this.cards.slice(this.index,this.index+this.currentloaded);
             } else {
                 for(let i=this.index;i<this.cards.length;i++) {
