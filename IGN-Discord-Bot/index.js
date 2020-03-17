@@ -4,8 +4,8 @@ const {
     prefix,
     token
 } = require('./credentials.json');
-var Xray = require('x-ray')
-var x = Xray()
+var Xray = require('x-ray');
+var x = Xray();
 const client = new Discord.Client();
 
 function applyFilter(query, filter = "all") {
@@ -40,7 +40,7 @@ function reactAwaitEdit(originalmessage, message, place, max) {
                 }
             })
             .catch(collected => {
-                message.reply(`you reacted with neither a thumbs up, nor a thumbs down (${collected[0]})`);
+                console.log(`you reacted with neither a thumbs up, nor a thumbs down (${collected[0]})`);
             }));
     } else {
         if (max > 1) {

@@ -10,16 +10,16 @@
             <i class="fas fa-share share column is-4"></i>
         </div>
     </div>
-     <video ref="video"  @click="changeVideoState('play')">
+     <video ref="video"   @click="changeVideoState('play')">
      </video>
-     <div id="video-controls" class="controls" data-state="hidden">
+     <div id="video-controls" class="controls container" data-state="hidden">
         <div class="progress-container columns is-mobile" ref="progress"  @mousemove="doDrag($event)"  @mousedown="dragging=true"  @click="setTime($event)">
           <span class="finished"  :style="`width:`+currentTime+'%;'"></span>
           <div class="currentplace"></div>
-          <span  class="inmem" :style="`width:` + ((bufferedTime+currentTime)>=100 ? 100-currentTime : bufferedTime) +`%;`"></span>
+          <span  class="inmem" :style="`width:` + (((bufferedTime+currentTime)*endTime)/endTime>=100 ? 100-currentTime : bufferedTime) +`%;`"></span>
         </div>
         <div class="columns">
-          <div class="columns is-mobile bottom">
+          <div class="columns is-mobile bottom container">
             <i @click="changeVideoState('play')"  :class="'fas bottom-icon ' + (playing ? `fa-play` : `fa-pause`)"></i>
             <img src="../assets/Infinite.png" class="infinite bottom-icon">
             <div class="volume">
@@ -29,7 +29,7 @@
                 <div class="currentplace"></div>
               </div>
             </div>
-          <div class="time-text">{{Math.round(currentTime/60)}}:{{(Math.round(currentTime%60)/100).toFixed(2).slice(2,4)}} / {{Math.round(endTime/60)}}:{{(Math.round(endTime%60)/100).toFixed(2).slice(2,4)}}  </div>
+          <div class="time-text">{{Math.floor(currentTime*endTime/100/60)}}:{{((((currentTime/100)*endTime)%60)/100).toFixed(3).slice(2,4)}} / {{Math.floor(endTime/60)}}:{{((endTime%60)/100).toFixed(3).slice(2,4)}}  </div>
           </div>
         </div>
       </div>
@@ -41,7 +41,8 @@
 export default {
   name: 'VideoPlayer',
   props: {
-    msg: String,
+    video: {},
+    currentIndex:Number,
   },
   data() {
     return {
@@ -71,6 +72,9 @@ export default {
         if (this.bufferedTime<=2) {
           this.bufferedTime=x;
         }
+      }
+      if(video.ended) {
+        this.$emit("nextVideo");
       }
       setTimeout(this.changeTime,this.dragging ? 20 : 200);
     },
@@ -121,16 +125,24 @@ export default {
       }
       },
       changeEndTime() {
-        this.endTime=this.$refs.video.duration-60-6;
+        this.endTime=this.$refs.video.duration;
       }
     }, mounted () {
         setInterval(this.changeTime(),20);
         window.addEventListener('mouseup', this.stopDrag());
         this.isMounted=true;
         this.$refs.video.removeAttribute('controls');
-        this.$refs.video.src="https://assets14.ign.com/videos/zencoder/2020/02/21/1920/25f4e16785788e3ba92bb23b563d1e06-3906000-1582298169.mp4";
         this.changeEndTime()
-  }, computed: {
+  }, watch : {
+    video() {
+        console.log(`Loaded ${this.video.assets[this.video.assets.length-1].url}`);
+        this.$refs.video.src=this.video.assets[this.video.assets.length-1].url;
+        this.$refs.video.load()
+        if(this.currentIndex!=0) this.changeVideoState("play");
+        this.changeEndTime();
+    }
+  },
+  computed: {
     speakerType() {
       switch(true) {
         case(this.volume>=50):
@@ -141,7 +153,7 @@ export default {
           return "fa-volume-down";
       }
     }
-  },
+  }, 
 }
 </script>
 
@@ -175,7 +187,7 @@ button {
 .time-text {
   color:white;
   font-size:.8em;
-  transform:translate(250%,40%);
+  transform:translate(300%,40%);
 }
 .speaker {
   font-size:1.5em;

@@ -3,7 +3,7 @@
     <div v-if="screen>=1100">
     <div class="columns vidart">
       <div class="column player">
-        <VideoPlayer/>
+        <VideoPlayer :video="videos[currentIndex]" :currentIndex="currentIndex"  @nextVideo="nextVideo()"/>
         <div class="columns">
           <b class="title is-size-2 column">World's Coolest Lorem Ipsum</b>
         </div>
@@ -12,7 +12,7 @@
         </div>
      </div>
     <div class="column playlist is-4">
-      <UpcomingPlaylist/>
+      <UpcomingPlaylist :cards="videos" @setVideo="setVideo" :index="currentIndex+1"/>
     </div>
     </div>
   </div>
@@ -28,7 +28,7 @@
         </div>
      </div>
     </div>
-    <UpcomingPlaylist/>
+    <UpcomingPlaylist :cards="videos" :index="currentIndex"/>
   </div>
    
   </div>
@@ -36,14 +36,13 @@
 
 <script>
 /*To-Do:
-Fix time code.
-Integrate the API... when I have time.
 Add sidebar buttons to player, make them go away when the display goes full screen... have them do nothing for now.
-
+Fully integrate API
 */
 import './../node_modules/bulma/css/bulma.css';
 import UpcomingPlaylist from './components/UpcomingPlaylist';
 import VideoPlayer from './components/VideoPlayer';
+
 
 export default {
   name: 'App',
@@ -53,21 +52,33 @@ export default {
   }, data() {
     return {
       screen: 0,
+      currentIndex:0,
+      videos:[],
     }
   },
   methods: {
     onResize() {
       this.screen=window.innerWidth; 
     },
-    getData() {
-
+    nextVideo() {
+      if(this.currentIndex+1<this.videos.length) {
+        this.currentIndex++;
+      }
+    },
+    setVideo(int) {
+      this.currentIndex=int;
     }
   },
   mounted() {
     // Register an event listener when the Vue component is ready
     this.screen=window.innerWidth;
     window.addEventListener('resize', this.onResize);
-    setTimeout(this.getData(),20);
+    const proxyurl = "https://cors-anywhere.herokuapp.com/";
+    const url = "https://ign-apis.herokuapp.com/videos?startIndex=0&count=10"; // site that doesn’t send Access-Control-*
+    fetch(proxyurl + url) // Stackoverflow found me this proxy site... Last I worked with heroku, I forgot of this suffering.
+    .then(response => (response.text()))
+    .then(contents => this.videos=JSON.parse(contents).data)
+    .catch(() => console.log("Can’t access " + url + " response. Blocked by browser?"))
 
   },
   beforeDestroy() {
@@ -139,8 +150,7 @@ export default {
    @media (min-width: 1700px) { 
     #app {
                 margin-left:15%;
-                transform: scale(1.2);
-                margin-top:30vh;
+                margin-top:10vh;
               }
    }
 </style>

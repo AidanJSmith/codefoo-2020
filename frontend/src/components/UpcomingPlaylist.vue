@@ -1,52 +1,31 @@
 <template>
     <div class="root">
         <div v-if="screen>=1100">
+            <div v-for="card in currentcards.slice(0,currentcards.length-1)" :key="card.contentId">
             <div class="columns">
                 <div class="column card-image" style="background-image:">   
-                    <div class="card-time" :style="styleTime">3:21</div>
-                    <img class="card-image" :ref="'cardImage'" src="https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftse1.mm.bing.net%2Fth%3Fid%3DOIP.0uIpcBNIlf72NCC4sDo5yQHaEK%26pid%3DApi%26h%3D160&f=1"/>
+                    <div class="card-time" :style="styleTime">{{Math.round(card.metadata.duration/60)}}:{{(card.metadata.duration%60/100).toFixed(2).slice(2)}}</div>
+                    <img class="card-image"  @click="setVideo(card.contentId)" :ref="'cardImage'" :src="card.thumbnails[card.thumbnails.length-1].url"/>
                 </div>
-                <div class="column playlist-header">
-                    This is my attempt at writing a lot of example text.
+                <div @click="setVideo(card.contentId)" class="column playlist-header">
+                    {{truncate(card.metadata.title)}}
                 </div>
             </div>
             <div class="columns"> 
                 <hr :v-if="0!=3"/>    
             </div>
+            </div>
+            <div v-for="card in currentcards.slice(currentcards.length-1)" :key="card.contentId">
             <div class="columns">
                 <div class="column card-image" style="background-image:">   
-                    <div class="card-time" :style="styleTime">3:21</div>
-                    <img class="card-image" :ref="'cardImage'" src="https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftse1.mm.bing.net%2Fth%3Fid%3DOIP.0uIpcBNIlf72NCC4sDo5yQHaEK%26pid%3DApi%26h%3D160&f=1"/>
+                    <div class="card-time" :style="styleTime">{{Math.round(card.metadata.duration/60)}}:{{(card.metadata.duration%60/100).toFixed(2).slice(2)}}</div>
+                    <img class="card-image" @click="setVideo(card.contentId)" :ref="'cardImage'" :src="card.thumbnails[card.thumbnails.length-1].url"/>
                 </div>
-                <div class="column playlist-header">
-                    This is my attempt at writing a lot of example text.
-                </div>
-            </div>
-            <div class="columns"> 
-                <hr :v-if="0!=3"/>    
-            </div>
-            <div class="columns">
-                <div class="column card-image" style="background-image:">   
-                    <div class="card-time" :style="styleTime">3:21</div>
-                    <img class="card-image" :ref="'cardImage'" src="https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftse1.mm.bing.net%2Fth%3Fid%3DOIP.0uIpcBNIlf72NCC4sDo5yQHaEK%26pid%3DApi%26h%3D160&f=1"/>
-                </div>
-                <div class="column playlist-header">
-                    This is my attempt at writing a lot of example text.
+                <div @click="setVideo(card.contentId)" class="column playlist-header">
+                    {{truncate(card.metadata.title)}}
                 </div>
             </div>
-            <div class="columns"> 
-                <hr :v-if="0!=3"/>    
             </div>
-            <div class="columns">
-                <div class="column card-image" style="background-image:">   
-                    <div class="card-time" :style="styleTime">3:21</div>
-                    <img class="card-image" :ref="'cardImage'" src="https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftse1.mm.bing.net%2Fth%3Fid%3DOIP.0uIpcBNIlf72NCC4sDo5yQHaEK%26pid%3DApi%26h%3D160&f=1"/>
-                </div>
-                <div class="column playlist-header">
-                    This is my attempt at writing a lot of example text.
-                </div>
-            </div>
-            
         </div>
         <div v-else>
             <div class="columns">
@@ -101,25 +80,57 @@
         
         <br/>
         <br/>
-        <button class="load-btn"> <b>Load More</b> </button>
+        <button class="load-btn" @click="currentloaded+=1;" v-if="index+3<cards.length"> <b>Load More</b> </button>
     </div>
 </template>
 
 <script>
 import './../../node_modules/bulma/css/bulma.css';
 export default {
-    'name':'UpcomingPlaylist',
+    name:'UpcomingPlaylist',
     props: {
-        cards: [],
+        cards: Array,
         index: Number,
     }, data() {
         return {
-        screen: 0,
+            screen: 0,
+            currentcards:[],
+            currentloaded:4,
         }
     },
     methods: {
         onResize() {
         this.screen=window.innerWidth; 
+        },
+        truncate(string) {
+            if(string.length<=80) {
+                return string
+            } else {
+                return string.split('').slice(0,77).join('')+"...";
+            }
+        },
+        setVideo(key) {
+            let found=false;
+            for(let i=0;i<this.cards.length;i++) {
+                if(this.cards[i].contentId==key){
+                    this.$emit('setVideo',i);
+                    found=true;
+                }
+            }
+            if(!found) {
+                console.log("Error. Video not found");
+                this.$emit('setVideo',-1);
+            }
+
+        },
+        update() {
+            if(this.index+3<=this.cards.length) {
+                this.currentcards=this.cards.slice(this.index,this.index+this.currentloaded);
+            } else {
+                for(let i=this.index;i<this.cards.length;i++) {
+                    this.currentcards.append(this.cards[i]);
+                }
+            }
         }
     },
     mounted() {
@@ -137,6 +148,18 @@ export default {
         return "right:"+window.innerWidth*.008+5+"%;";
         },
     },
+    watch : {
+        cards() {
+           this.update();
+        },
+        currentloaded() {
+           this.update();
+        },
+        index() {
+            this.update();
+        }
+     
+    }
 
 }
 </script>
@@ -149,6 +172,7 @@ hr {
     margin-left:2%;
     margin-bottom:2.35%;
     background-color:lightgray;
+
 }
 .root {
     position: sticky;
@@ -159,11 +183,14 @@ hr {
     border-radius: .5vw;
     max-height:100%; 
     max-width:100%;
+    cursor: pointer;
+
 }
 .card-image-lg {
     width:100%;
     max-height:100%; 
     max-width:100%;
+    cursor: pointer;
 }
 .playlist-header {
     font-size:1.1em;
@@ -171,6 +198,7 @@ hr {
     -webkit-text-stroke-color:#3F4144;
     margin-top:.25em;
     line-height: 1.3;
+    cursor: pointer;
     color:#3F4144;
 }
 .load-btn {
@@ -305,7 +333,7 @@ hr {
     }
    @media (min-width: 1500px) { 
        .root {
-                width: 74%;
+                width: 88%;
               }
     .card-time {
         position: absolute;
