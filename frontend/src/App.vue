@@ -17,18 +17,18 @@
     </div>
   </div>
   <div v-else>
-      <div class="columns">
+      <div class="columns vidart">
       <div class="column player">
-        <VideoPlayer/>
+        <VideoPlayer :video="videos[currentIndex]" :currentIndex="currentIndex"  @nextVideo="nextVideo()"/>
         <div class="columns">
-          <b class="title is-size-1 column">World's Coolest Lorem Ipsum</b>
+          <b class="title is-size-2 column">{{title}}</b>
         </div>
         <div class="columns">
-          <div class="body column">Look at all of this great, fascinating text that I'm goingok at all of this great, fascinating>Look at all of this great, fascinating text that I'm goingok at all of this great, fascinating>Look at all of this great, fascinating text that I'm goingok at all of this great, fascinating>Look at all of this great, fascinating text that I'm goingok at all of this great, fascinating>Look at all of this great, fascinating text that I'm goingok at all of this great, fascinating>Look at all of this great, fascinating text that I'm goingok at all of this great, fascinating>Look at all of this great, fascinating text that I'm goingok at all of this great, fascinating>Look at all of this great, fascinating text that I'm goingok at all of this great, fascinating>Look at all of this great, fascinating text that I'm goingok at all of this great, fascinating>Look at all of this great, fascinating text that I'm goingok at all of this great, fascinating>Look at all of this great, fascinating text that I'm goingok at all of this great, fascinating>Look at all of this great, fascinating text that I'm goingok at all of this great, fascinating>Look at all of this great, fascinating text that I'm goingok at all of this great, fascinating>Look at all of this great, fascinating text that I'm goingok at all of this great, fascinating text that I'm goingok at all of this great, fascinating text that I'm goingok at all of this great, fascinating text that I'm goingok at all of this great, fascinating text that I'm goingok at all of this great, fascinating text that I'm going to read right now. I sure do love reading all of this text.</div>
+          <div class="body column">{{body}}</div>
         </div>
      </div>
     </div>
-    <UpcomingPlaylist :cards="videos" :index="currentIndex"/>
+    <UpcomingPlaylist :cards="videos" @setVideo="setVideo" :index="currentIndex"/>
   </div>
    
   </div>
@@ -118,12 +118,20 @@ export default {
   font-size:1.3em;
   margin-top:-.2em;
   line-height:1.4;
+  user-select:text;
+}
+::selection {
+  background:#BF1313;
+  color:white;
+  -webkit-text-stroke-width: 0vh;
+  -webkit-text-stroke-color: white;
 }
 .title {
-  margin-top:1.4em;
+  margin-top:.6em;
   font-family:  'Open Sans', 'Helvetica Neue', sans-serif, sans-serif;
   -webkit-text-stroke-width: .1vh;
   -webkit-text-stroke-color: rgb(#363636);
+  user-select: text;
 
 }
 

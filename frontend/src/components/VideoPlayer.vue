@@ -4,7 +4,7 @@
         href="https://use.fontawesome.com/releases/v5.2.0/css/all.css" 
         integrity="sha384-hWVjflwFxL6sNzntih27bfxkr27PmbbK/iSvJ+a4+0owXq79v+lsFkW54bOGbiDQ" 
         crossorigin="anonymous">
-     <div class="topbar" data-state="hidden">
+     <div class="topbar tophover">
         <div class="columns is-mobile" ref="progress">
             <div class="toptitle column is-8">{{truncate(title)}}</div>
             <i class="fas fa-share share column is-4"></i>
@@ -12,7 +12,7 @@
     </div>
      <video ref="video"   @click="changeVideoState('play')">
      </video>
-     <div id="video-controls" class="controls container" data-state="hidden">
+     <div id="video-controls" class="controls container showhover" data-state="hidden">
         <div class="progress-container columns is-mobile" ref="progress"  @mousemove="doDrag($event)"  @mousedown="dragging=true"  @click="setTime($event)">
           <span class="finished"  :style="`width:`+currentTime+'%;'"></span>
           <div class="currentplace"></div>
@@ -21,7 +21,7 @@
         <div class="columns">
           <div class="columns is-mobile bottom container">
             <i @click="changeVideoState('play')"  :class="'fas bottom-icon ' + (playing ? `fa-play` : `fa-pause`)"></i>
-            <img src="../assets/Infinite.png" class="infinite bottom-icon">
+            <img src="../assets/Infinite.png" class="bar-image">
             <div class="volume">
               <i @click="changeVideoState('mute')"  :class="'fas bottom-icon speaker fa-volume-up'"></i>
               <div class="volume-bar columns is-mobile" ref="volume" @mousemove="doDrag($event)"  @mousedown="volumedrag=true"  @click="setVolume($event)">
@@ -30,6 +30,13 @@
               </div>
             </div>
           <div class="time-text">{{Math.floor(currentTime*endTime/100/60)}}:{{((((currentTime/100)*endTime)%60)/100).toFixed(3).slice(2,4)}} / {{Math.floor(endTime/60)}}:{{((endTime%60)/100).toFixed(3).slice(2,4)}}  </div>
+          </div>
+          <div class="container right-most is-mobile">
+              <img src="../assets/HD.png" class="bar-image right-paramters hd">
+              <img src="../assets/4K.png" class="bar-image img4k">
+              <img src="../assets/CC.png" class="bar-image right-paramters">
+              <img src="../assets/Theatre.png" class="bar-image right-paramters">
+              <img src="../assets/Miniplayer.png" class="bar-image right-paramters">
           </div>
         </div>
       </div>
@@ -186,12 +193,27 @@ button {
 }
 .bottom-icon {
   color:white;
-  font-size:1.3em;
-  transform:translate(120%,12%);
+  font-size:1.55em;
+  transform:translate(120%,13%);
   cursor:pointer;
   display:inline-block;
 
 }
+.right-most {
+  transform:translateY(-60%);
+  right:-5em;
+  width:6%;
+  height:2%;
+  font-size:.7em;
+}
+.right-paramters {
+  margin-left:5%;
+  cursor: pointer;
+}
+.img4k {
+    margin-left:1%;
+}
+
 .time-text {
   color:white;
   font-size:.8em;
@@ -205,11 +227,13 @@ button {
   transform:translate(200%,10%) !important;
   font-size:1.75em;
 }
-.infinite {
-  width:5%;
-  height:100%;
-  font-size:.2em !important;
+.bar-image {
+  width:0%;
+  height:80%;
+  font-size:.1em;
   transform:translate(90%,10%);
+  cursor:pointer;
+
 }
 .volume {
   transform: translate(120%,10%);
@@ -270,6 +294,16 @@ button {
 video {
   border-radius:.6em;
 }
+.showhover {
+  opacity: 0%;
+  transition: opacity .25s;
+}
+video:hover + .showhover{
+  opacity: 100%;
+}
+.showhover:hover{
+  opacity: 100%;
+}
 
 .finished {
   display:inline-block;
@@ -320,7 +354,6 @@ video {
     .toptitle {
       font-size:1em;
       transform: translate(-3%, -390%);
-
     }
     .share {
       font-size:1.25em;
@@ -330,16 +363,26 @@ video {
     .bottom {
         transform:translate(0%,-80%);
     }
-    .infinite {
+    .bar-image {
       width:16em;
       font-size:.2em !important;
       transform:translate(80%,10%);
     }
+    .right-most {
+      font-size:0em;
+    }
    }
-    @media (min-width: 763px) { 
+    @media (min-width: 773px) { 
       .toptitle {
         font-size:1.25em;
         
+      }
+      .right-most {
+        transform:translateY(-60%);
+        right:-5em;
+        width:6%;
+        height:2%;
+        font-size:.7em;
       }
       .share {
         font-size:1.5em;
@@ -359,13 +402,30 @@ video {
         font-size:1.75em;
       }
    }
+   @media (min-width: 1100px) {
+     .right-most {
+        right:2em;
+      }
+   }
    @media (min-width: 1274px) { 
       .toptitle {
         font-size:1.1em;
         
       }
+      .right-most {
+        transform:translateY(-60%);
+        right:-3.5em;
+        width:6%;
+        height:2%;
+        font-size:.7em;
+      }
       .share {
         font-size:1.5em;
+      }
+   }
+    @media (min-width: 1416px) {
+     .right-most {
+        right:-7.2em;
       }
    }
 </style>

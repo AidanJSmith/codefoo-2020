@@ -5,7 +5,7 @@
             <div class="columns">
                 <div class="column card-image" style="background-image:">   
                     <div class="card-time" :style="styleTime">{{Math.round(card.metadata.duration/60)}}:{{(card.metadata.duration%60/100).toFixed(2).slice(2)}}</div>
-                    <img class="card-image"  @click="setVideo(card.contentId)" :ref="'cardImage'" :src="card.thumbnails[card.thumbnails.length-1].url"/>
+                    <img class="card-image"  @click="setVideo(card.contentId)" :src="card.thumbnails[card.thumbnails.length-1].url"/>
                 </div>
                 <div @click="setVideo(card.contentId)" class="column playlist-header">
                     {{truncate(card.metadata.title)}}
@@ -19,7 +19,7 @@
             <div class="columns">
                 <div class="column card-image" style="background-image:">   
                     <div class="card-time" :style="styleTime">{{Math.round(card.metadata.duration/60)}}:{{(card.metadata.duration%60/100).toFixed(2).slice(2)}}</div>
-                    <img class="card-image" @click="setVideo(card.contentId)" :ref="'cardImage'" :src="card.thumbnails[card.thumbnails.length-1].url"/>
+                    <img class="card-image" @click="setVideo(card.contentId)" :src="card.thumbnails[card.thumbnails.length-1].url"/>
                 </div>
                 <div @click="setVideo(card.contentId)" class="column playlist-header">
                     {{truncate(card.metadata.title)}}
@@ -28,59 +28,36 @@
             </div>
         </div>
         <div v-else>
-            <div class="columns">
+            <div v-for="card in currentcards.slice(1,currentcards.length)" :key="card.contentId">
+            <div class="columns" @click="setVideo(card.contentId)">
                 <div class="column card-image" style="background-image:">   
-                    <div class="card-time-lg">3:21</div>
-                    <img class="card-image-lg" :ref="'cardImage'" src="https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftse1.mm.bing.net%2Fth%3Fid%3DOIP.0uIpcBNIlf72NCC4sDo5yQHaEK%26pid%3DApi%26h%3D160&f=1"/>
+                    <div class="card-time-lg" :style="styleTime">{{Math.round(card.metadata.duration/60)}}:{{(card.metadata.duration%60/100).toFixed(2).slice(2)}}</div>
+                    <img class="card-image"  :src="card.thumbnails[card.thumbnails.length-1].url"/>
+                </div>
+                <div @click="setVideo(card.contentId)" class="column playlist-header">
+                    {{truncate(card.metadata.title)}}
                 </div>
             </div>
-                <div class="column playlist-header" style="text-align:center">
-                    This is my attempt at writing a lot of example text.
-                </div>
             <div class="columns"> 
                 <hr :v-if="0!=3"/>    
             </div>
+            </div>
+            <div v-for="card in currentcards.slice(currentcards.length)" :key="card.contentId">
             <div class="columns">
                 <div class="column card-image" style="background-image:">   
-                    <div class="card-time-lg">3:21</div>
-                    <img class="card-image-lg" :ref="'cardImage'" src="https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftse1.mm.bing.net%2Fth%3Fid%3DOIP.0uIpcBNIlf72NCC4sDo5yQHaEK%26pid%3DApi%26h%3D160&f=1"/>
+                    <div class="card-time-lg" :style="styleTime">{{Math.round(card.metadata.duration/60)}}:{{(card.metadata.duration%60/100).toFixed(2).slice(2)}}</div>
+                    <img class="card-image" @click="setVideo(card.contentId)" :src="card.thumbnails[card.thumbnails.length-1].url"/>
+                </div>
+                <div @click="setVideo(card.contentId)" class="column playlist-header">
+                    {{truncate(card.metadata.title)}}
                 </div>
             </div>
-                <div class="column playlist-header" style="text-align:center">
-                    This is my attempt at writing a lot of example text.
-                </div>
-            <div class="columns"> 
-                <hr :v-if="0!=3"/>    
             </div>
-            <div class="columns">
-                <div class="column card-image" style="background-image:">   
-                    <div class="card-time-lg">3:21</div>
-                    <img class="card-image-lg" :ref="'cardImage'" src="https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftse1.mm.bing.net%2Fth%3Fid%3DOIP.0uIpcBNIlf72NCC4sDo5yQHaEK%26pid%3DApi%26h%3D160&f=1"/>
-                </div>
-            </div>
-                <div class="column playlist-header" style="text-align:center">
-                    This is my attempt at writing a lot of example text.
-                </div>
-            <div class="columns"> 
-                <hr :v-if="0!=3"/>    
-            </div>
-            <div class="columns">
-                <div class="column card-image" style="background-image:">   
-                    <div class="card-time-lg">3:21</div>
-                    <img class="card-image-lg" :ref="'cardImage'" src="https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftse1.mm.bing.net%2Fth%3Fid%3DOIP.0uIpcBNIlf72NCC4sDo5yQHaEK%26pid%3DApi%26h%3D160&f=1"/>
-                </div>
-            </div>
-                <div class="column playlist-header" style="text-align:center">
-                    This is my attempt at writing a lot of example text.
-                </div>
-            <div class="columns"> 
-            </div>
-
         </div>
         
         <br/>
         <br/>
-        <button class="load-btn" @click="currentloaded+=1;" v-if="index+3<cards.length"> <b>Load More</b> </button>
+        <button class="load-btn" @click="currentloaded+=1;" v-if="index+5<=cards.length"> <b>Load More</b> </button>
     </div>
 </template>
 
@@ -100,7 +77,8 @@ export default {
     },
     methods: {
         onResize() {
-        this.screen=window.innerWidth; 
+            this.screen=window.innerWidth; 
+            this.update(); 
         },
         truncate(string) {
             if(string.length<=80) {
@@ -127,9 +105,7 @@ export default {
             if(this.index+4<=this.cards.length) {
                 this.currentcards=this.cards.slice(this.index,this.index+this.currentloaded);
             } else {
-                for(let i=this.index;i<this.cards.length;i++) {
-                    this.currentcards.append(this.cards[i]);
-                }
+                this.currentcards=this.cards.slice(this.index,this.cards.length);
             }
         }
     },
@@ -200,6 +176,7 @@ hr {
     line-height: 1.3;
     cursor: pointer;
     color:#3F4144;
+    user-select: text;
 }
 .load-btn {
     background-color: #BF1313;
@@ -237,14 +214,14 @@ hr {
     position: absolute;
     z-index: 99;
     color:white;
-    font-size:4vw;
-    padding:.2em;
+    font-size:2vw;
+    padding:.1em;
     padding-left:.4em;
-    padding-right:.4em;
+    padding-right:-.2em;
     -webkit-text-stroke-width: .06vh;
     -webkit-text-stroke-color: white;
     background-color:#3F4144;
-    top:80%;
+    top:50%;
     left:80%;
 }
   @media (min-width: 200px) {  
@@ -260,16 +237,7 @@ hr {
             left:80%;
         }
     .card-time {
-        position: absolute;
-        z-index: 99;
-        color:white;
         font-size:.85vw;
-        padding:.2em;
-        padding-left:.4em;
-        padding-right:.4em;
-        -webkit-text-stroke-width: .06vh;
-        -webkit-text-stroke-color: white;
-        background-color:#3F4144;
         margin-top:32.5%;
     }
    }
@@ -286,16 +254,7 @@ hr {
                 width: 80%;
               }
     .card-time {
-        position: absolute;
-        z-index: 99;
-        color:white;
         font-size:.85vw;
-        padding:.2em;
-        padding-left:.4em;
-        padding-right:.4em;
-        -webkit-text-stroke-width: .06vh;
-        -webkit-text-stroke-color: white;
-        background-color:#3F4144;
         margin-top:32.5%;
     }
     
@@ -312,18 +271,9 @@ hr {
                 width: 80%;
               }
         .card-time {
-        position: absolute;
-        z-index: 99;
-        color:white;
-        font-size:.9vw;
-        padding:.2em;
-        padding-left:.4em;
-        padding-right:.4em;
-        -webkit-text-stroke-width: .06vh;
-        -webkit-text-stroke-color: white;
-        background-color:#3F4144;
-        margin-top:32.5%;
-      }
+            font-size:.9vw;
+            margin-top:32.5%;
+         }
    }
     @media (min-width: 1420) { 
     .root {
@@ -336,17 +286,9 @@ hr {
                 width: 88%;
               }
     .card-time {
-        position: absolute;
-        z-index: 99;
-        color:white;
+
         font-size:.65em;
-        padding:.1em;
-        padding-left:.4em;
-        padding-right:.4em;
-        -webkit-text-stroke-width: .06vh;
-        -webkit-text-stroke-color: white;
-        background-color:#3F4144;
-        margin-top:32.5%;
+        margin-top:36.5%;
     }
    }
 </style>
