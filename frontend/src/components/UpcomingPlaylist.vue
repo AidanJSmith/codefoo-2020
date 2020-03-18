@@ -84,10 +84,10 @@ export default {
             this.update(); 
         },
         truncate(string) { //Take the first 80 chars for the playlist header.
-            if(string.length<=80) {
-                return string 
+            if(string.length<=60) {
+                return string.replace(/\n/g, " ")
             } else {
-                return string.split('').slice(0,77).join('')+"..."; 
+                return string.split('').slice(0,57).join('').replace(/\n/g, ",")+"..."; 
             }
         },
         setVideo(key) { //Convert the key of the clicked card to the index of the cards list.

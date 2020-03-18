@@ -1,24 +1,20 @@
-# frontend
+# Code-Foo 2020 Frontend
 
-## Project setup
-```
+### Dependencies/Architecture
+
+This project is built with Vue.js and the Bulma CSS framework. Several icons are from Font Awesome. Code by Aidan Smith. 
+
+- Target:![Target](https://media.ignimgs.com/code-foo/2020/images/cfx_video_mock.jpg)
+- Result:![Result](https://i.imgur.com/4TFD5gu.png)
+ Features:
+  - Functional play, pause, load more, and mute buttons.
+  - Video seeking.
+  - Accurate buffering bar.
+  - Responsive layout.
+  
+## Setup
+
+```shell
 npm install
-```
-
-### Compiles and hot-reloads for development
-```
 npm run serve
 ```
-
-### Compiles and minifies for production
-```
-npm run build
-```
-
-### Lints and fixes files
-```
-npm run lint
-```
-
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
