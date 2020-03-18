@@ -1,5 +1,6 @@
 <template>
   <div class="vid-container" @mouseup="dragging=false;volumedrag=false" >
+    <!-- Some FA assets are used... as they are provincial, I have used a traditional stylesheet here. --->
     <link rel="stylesheet" 
         href="https://use.fontawesome.com/releases/v5.2.0/css/all.css" 
         integrity="sha384-hWVjflwFxL6sNzntih27bfxkr27PmbbK/iSvJ+a4+0owXq79v+lsFkW54bOGbiDQ" 
@@ -10,16 +11,16 @@
             <i class="fas fa-share share column is-4"></i>
         </div>
     </div>
-     <video ref="video"   @click="changeVideoState('play')">
+     <video ref="video"   @click="changeVideoState('play')"> <!-- Click anywhere on the video to play/pause it --->
      </video>
-     <div id="video-controls" class="controls container showhover" data-state="hidden">
+     <div id="video-controls" class="controls container showhover" data-state="hidden"> <!-- Bottom navbar progress and seeking--->
         <div class="progress-container columns is-mobile" ref="progress"  @mousemove="doDrag($event)"  @mousedown="dragging=true"  @click="setTime($event)">
           <span class="finished"  :style="`width:`+currentTime+'%;'"></span>
           <div class="currentplace"></div>
           <span  class="inmem" :style="`width:` + (((bufferedTime+currentTime)*endTime)/endTime>=100 ? 100-currentTime : bufferedTime) +`%;`"></span>
         </div>
-        <div class="columns">
-          <div class="columns is-mobile bottom container">
+        <div class="columns"> <!-- Bottom navbar buttons. The only ones what have been assigned values are play, pause, and the entirety of the volume container. --->
+          <div class="columns is-mobile bottom container"> <!-- Is-mobile class prevents wrapping --->
             <i @click="changeVideoState('play')"  :class="'fas bottom-icon ' + (playing ? `fa-play` : `fa-pause`)"></i>
             <img src="../assets/Infinite.png" class="bar-image">
             <div class="volume">
@@ -31,7 +32,7 @@
             </div>
           <div class="time-text">{{Math.floor(currentTime*endTime/100/60)}}:{{((((currentTime/100)*endTime)%60)/100).toFixed(3).slice(2,4)}} / {{Math.floor(endTime/60)}}:{{((endTime%60)/100).toFixed(3).slice(2,4)}}  </div>
           </div>
-          <div class="container right-most is-mobile">
+          <div class="container right-most is-mobile"> <!-- These were all made in photoshop based on your specifications. They may not be perfect, and would be replaced in a production version of the code. They are built like this to be mapped as individual buttons in the future.--->
               <img src="../assets/HD.png" class="bar-image right-paramters hd">
               <img src="../assets/4K.png" class="bar-image img4k">
               <img src="../assets/CC.png" class="bar-image right-paramters">
@@ -62,18 +63,18 @@ export default {
       playing:false,
       volume:100,
       endTime:0,
-      title:"Loading..."
+      title:"Loading..." //Default the title to loading in order to avoid state-based issues.
     }
   },
   methods: {
-     truncate(string) {
+     truncate(string) { //Truncate the title to a max of 60 characters. 
             if(string.length<=60) {
                 return string
             } else {
                 return string.split('').slice(0,57).join('')+"...";
             }
     },
-    changeTime() {
+    changeTime() { //This is the pulse event that updates the status bar & makes changes that depend on time conditions.
       if(!this.endTime) {
         this.changeEndTime()
       }
@@ -91,9 +92,9 @@ export default {
       if(video.ended) {
         this.$emit("nextVideo");
       }
-      setTimeout(this.changeTime,this.dragging ? 20 : 200);
+      setTimeout(this.changeTime,this.dragging ? 20 : 200); //Make this loop run faster if they're dragging for a smoother feel.
     },
-    setTime(event) {
+    setTime(event) {  //Converts the current time to a timecode based on how far along the progress bar they pressed
       const video=this.$refs.video;
       video.currentTime=video.duration*(event.clientX -  this.$refs.progress.getBoundingClientRect().left)/this.$refs.progress.getBoundingClientRect().width;
    },
@@ -101,7 +102,7 @@ export default {
      this.dragging=false;
      this.volumedrag=false;
    },
-   doDrag(event) {
+   doDrag(event) { //Similar to set time, but accounts for the audio slider as well.
       const video=this.$refs.video;
       if (this.volumedrag) {
         this.volume=100*(Math.abs(this.$refs.volume.getBoundingClientRect().left - event.clientX)/this.$refs.volume.getBoundingClientRect().width).toFixed(1);
@@ -111,68 +112,53 @@ export default {
          video.currentTime=video.duration*(event.clientX -  this.$refs.progress.getBoundingClientRect().left)/this.$refs.progress.getBoundingClientRect().width;
       }
    },
-   setVolume(event) {
+   setVolume(event) { //Round the volume to a multiple of ten for consistency. Set the volume.
      const video=this.$refs.video;
      this.volume=100*(Math.abs(this.$refs.volume.getBoundingClientRect().left - event.clientX)/this.$refs.volume.getBoundingClientRect().width).toFixed(1);
      video.volume=this.volume/100;
    },
-    changeVideoState(state) {
-      const video=this.$refs.video;
-      if(state=="play") {
-        if (video.paused) {
-          video.play();
-        } else {
-          video.pause();
-        }
-      } else if(state=='stop') {
-        video.currentTime=20;
-      } else if(state=='mute') {
-        if(video.volume==.1) {
-          this.volume=this.lastvolume;
-          video.volume=this.volume/100;
-        } else {
-          this.lastvolume=this.volume;
-          this.volume=10;
-          video.volume=.1;
-        }
+  changeVideoState(state) { //A general function to handle state actions. This would be built upon, if the other unused buttons are to be given function.
+    const video=this.$refs.video;
+    if(state=="play") {
+      if (video.paused) {
+        video.play();
+      } else {
+        video.pause();
+      }
+    }else if(state=='mute') { //Caches last volume for persistence. If the end user presses the mute button again (the speaker), it'll return them to their last set volume.
+      if(video.volume==.1) {
+        this.volume=this.lastvolume;
+        video.volume=this.volume/100;
+      } else {
+        this.lastvolume=this.volume;
+        this.volume=10;
+        video.volume=.1;
+      }
 
-      }
-      },
-      changeEndTime() {
-        this.endTime=this.$refs.video.duration;
-      }
-    }, mounted () {
-        setInterval(this.changeTime(),20);
-        window.addEventListener('mouseup', this.stopDrag());
-        this.isMounted=true;
-        this.$refs.video.removeAttribute('controls');
-        this.changeEndTime()
+    }
+    },
+    changeEndTime() { // Whenever the video is changed, the endtime needs to as well, as many functions depend on it for their percentages.
+      this.endTime=this.$refs.video.duration;
+    }
+  }, mounted () { //Initial set up when the video is mounted.
+      setInterval(this.changeTime(),20);
+      window.addEventListener('mouseup', this.stopDrag());
+      this.isMounted=true;
+      this.$refs.video.removeAttribute('controls');
+      this.changeEndTime()
   }, watch : {
-    video() {
-        console.log(`Loaded ${this.video.assets[this.video.assets.length-1].url}`);
-        this.$refs.video.src=this.video.assets[this.video.assets.length-1].url;
-        this.$refs.video.load()
-        if(this.currentIndex!=0) this.changeVideoState("play");
-        this.changeEndTime();
-        this.title=this.video.metadata.title;
-    }
-  },
-  computed: {
-    speakerType() {
-      switch(true) {
-        case(this.volume>=50):
-          return "fa-volume-up";
-        case(this.volume==10):
-          return "fa-volume-mute";
-        default:
-          return "fa-volume-down";
+      video() { //If the video object passed changes, load it, and start playing. (this only triggers on videos after the first.)
+          console.log(`Loaded ${this.video.assets[this.video.assets.length-1].url}`);
+          this.$refs.video.src=this.video.assets[this.video.assets.length-1].url;
+          this.$refs.video.load()
+          if(this.currentIndex!=0) this.changeVideoState("play");
+          this.changeEndTime();
+          this.title=this.video.metadata.title;
       }
-    }
-  }, 
+  },
 }
 </script>
 
-<!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
 
 .vid-container {

@@ -1,5 +1,6 @@
 <template>
     <div class="root">
+        <!-- The playlist, on the side. --->
         <div v-if="screen>=1100">
             <div v-for="card in currentcards.slice(0,currentcards.length-1)" :key="card.contentId">
             <div class="columns">
@@ -12,7 +13,7 @@
                 </div>
             </div>
             <div class="columns"> 
-                <hr :v-if="0!=3"/>    
+                <hr/>    
             </div>
             </div>
             <div v-for="card in currentcards.slice(currentcards.length-1)" :key="card.contentId">
@@ -27,6 +28,7 @@
             </div>
             </div>
         </div>
+        <!-- The playlist, on the bottom.--->
         <div v-else>
             <div v-for="card in currentcards.slice(1,currentcards.length)" :key="card.contentId">
             <div class="columns" @click="setVideo(card.contentId)">
@@ -39,7 +41,7 @@
                 </div>
             </div>
             <div class="columns"> 
-                <hr :v-if="0!=3"/>    
+                <hr/>    
             </div>
             </div>
             <div v-for="card in currentcards.slice(currentcards.length)" :key="card.contentId">
@@ -57,7 +59,8 @@
         
         <br/>
         <br/>
-        <button class="load-btn" @click="currentloaded+=1;" v-if="index+5<=cards.length"> <b>Load More</b> </button>
+        <!-- I.e, four assets exist at all times on the side --->
+        <button class="load-btn" @click="currentloaded+=1;" v-if="index+5<=cards.length&&currentloaded+index<cards.length"> <b>Load More</b> </button>
     </div>
 </template>
 
@@ -77,17 +80,17 @@ export default {
     },
     methods: {
         onResize() {
-            this.screen=window.innerWidth; 
+            this.screen=window.innerWidth; //Modify width to change card stylings.
             this.update(); 
         },
-        truncate(string) {
+        truncate(string) { //Take the first 80 chars for the playlist header.
             if(string.length<=80) {
-                return string
+                return string 
             } else {
-                return string.split('').slice(0,77).join('')+"...";
+                return string.split('').slice(0,77).join('')+"..."; 
             }
         },
-        setVideo(key) {
+        setVideo(key) { //Convert the key of the clicked card to the index of the cards list.
             let found=false;
             for(let i=0;i<this.cards.length;i++) {
                 if(this.cards[i].contentId==key){
@@ -101,7 +104,7 @@ export default {
             }
 
         },
-        update() {
+        update() { //Set the cards that the playlist itself will contain, outside of the entire array.
             if(this.index+4<=this.cards.length) {
                 this.currentcards=this.cards.slice(this.index,this.index+this.currentloaded);
             } else {
@@ -109,7 +112,7 @@ export default {
             }
         }
     },
-    mounted() {
+    mounted() { 
         // Register an event listener when the Vue component is ready
         this.screen=window.innerWidth;
         window.addEventListener('resize', this.onResize)
@@ -120,11 +123,10 @@ export default {
     },
     computed : {
         styleTime() {
-
-        return "right:"+window.innerWidth*.008+5+"%;";
+            return "right:"+window.innerWidth*.008+5+"%;"; //Magic numbers that place the card correctly.
         },
     },
-    watch : {
+    watch : { //When any of the properties are changed, update the shown cards.
         cards() {
            this.update();
         },
@@ -248,6 +250,7 @@ hr {
                 margin-left:5%;
               }
   }
+   /* Extra large devices (large desktops, 1200px and up) */
 
    @media (min-width: 1220px) { 
        .root {
@@ -265,10 +268,9 @@ hr {
               }
     
    }
-   /* Extra large devices (large desktops, 1200px and up) */
   @media (min-width: 1400px) { 
        .root {
-                width: 80%;
+                width: 88%;
               }
         .card-time {
             font-size:.9vw;

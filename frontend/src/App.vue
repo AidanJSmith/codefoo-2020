@@ -1,4 +1,5 @@
 <template>
+ <!--Contains the version of the site in which the playlists are on the side.-->
   <div id="app" class="container">
     <div v-if="screen>=1100">
     <div class="columns vidart">
@@ -16,6 +17,7 @@
     </div>
     </div>
   </div>
+  <!--Contains the version of the site in which the playlists are on the bottom. -->
   <div v-else>
       <div class="columns vidart">
       <div class="column player">
@@ -35,11 +37,7 @@
 </template>
 
 <script>
-/*To-Do:
-Add sidebar buttons to player, make them go away when the display goes full screen... have them do nothing for now.
-Fully integrate API
-*/
-import './../node_modules/bulma/css/bulma.css';
+import './../node_modules/bulma/css/bulma.css'; 
 import UpcomingPlaylist from './components/UpcomingPlaylist';
 import VideoPlayer from './components/VideoPlayer';
 
@@ -60,10 +58,10 @@ export default {
   },
   methods: {
     onResize() {
-      this.screen=window.innerWidth; 
+      this.screen=window.innerWidth; //This is used to determine whether or not to show the playlist on the bottom or side.
     },
     nextVideo() {
-      if(this.currentIndex+1<this.videos.length) {
+      if(this.currentIndex+1<this.videos.length) { //Updates the place 
         this.currentIndex++;
       }
     },
@@ -75,13 +73,13 @@ export default {
     // Register an event listener when the Vue component is ready
     this.screen=window.innerWidth;
     window.addEventListener('resize', this.onResize);
-    const proxyurl = "https://cors-anywhere.herokuapp.com/";
-    const url = "https://ign-apis.herokuapp.com/videos?startIndex=0&count=10"; // site that doesn’t send Access-Control-*
+    const proxyurl = "https://cors-anywhere.herokuapp.com/"; //Proxy required, as it's hosted on Heroku.
+    const url = "https://ign-apis.herokuapp.com/videos?startIndex=0&count=10";
     fetch(proxyurl + url) // Stackoverflow found me this proxy site... Last I worked with heroku, I forgot of this suffering.
     .then(response => (response.text()))
     .then(contents => {
       this.videos=JSON.parse(contents).data;
-      this.title=this.videos[this.currentIndex].metadata.title;
+      this.title=this.videos[this.currentIndex].metadata.title; //Initialize the site. Replaces the default loading message.
       this.body=this.videos[this.currentIndex].metadata.description;
     })
     .catch(() => console.log("Can’t access " + url + " response. Blocked by browser?"))
@@ -93,6 +91,7 @@ export default {
   },
   watch : {
     currentIndex() {
+      //If the index is ever changed, modify the "article" as well.
       this.title=this.videos[this.currentIndex].metadata.title;
       this.body=this.videos[this.currentIndex].metadata.description;
     }
@@ -100,7 +99,7 @@ export default {
 }
 </script>
 
-<style>
+<style> 
 #app {
   font-family:  'Open Sans', 'Helvetica Neue', sans-serif, sans-serif;
   -webkit-font-smoothing: antialiased;
@@ -120,7 +119,7 @@ export default {
   line-height:1.4;
   user-select:text;
 }
-::selection {
+::selection {/* Set the color to something other than contrasting blue. */
   background:#BF1313;
   color:white;
   -webkit-text-stroke-width: 0vh;

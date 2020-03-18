@@ -173,16 +173,16 @@ function getScore(message) {
         for (let item of obj) {
             highest=item.trim()>highest ? item.trim() : highest;
         }
-        const canvas = Canvas.createCanvas(542, 614);
+        const canvas = Canvas.createCanvas(135.5, 153.5);
         const ctx = canvas.getContext('2d');
         // Since the image takes time to load, you should await it
         let img =  await Canvas.loadImage('./assets/ign.png');
          // This uses the canvas dimensions to stretch the image onto the entire canvas
         ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
-        ctx.font = "240px Arial";
+        ctx.font = "60px Arial";
         ctx.fillStyle = "white";
         ctx.textAlign = "center"
-        if(parseInt(highest,10)>0||"fifa" in message ||"madden" in message||"nba2k" in message) { // These games get -1s... I'm not biased?
+        if(parseInt(highest,10)>0) { // These games get -1s... I'm not biased?
         ctx.fillText(parseFloat(highest,10).toPrecision(2),  canvas.width/2, canvas.height/1.6)
             // Use helpful Attachment class structure to process the file for you
             const attachment = new Discord.MessageAttachment(canvas.toBuffer(), 'welcome-image.png');
@@ -195,6 +195,7 @@ function getScore(message) {
 }
 client.once('ready', () => {
     console.log('Active.');
+    client.user.setPresence({ activity: { name: 'on IGN.com' }, status: 'online' })
 });
 client.on('message', message => {
     if (message.content.startsWith(`${prefix}`)) {
@@ -204,8 +205,6 @@ client.on('message', message => {
             getScore(message);
         } else if (message.content.startsWith(`${prefix} game`)) {
             message.channel.send('Just search the games');
-        } else {
-            message.channel.send('Make a sitewide query');
         }
 
 
