@@ -71,6 +71,7 @@ export default {
     props: {
         cards: Array,
         index: Number,
+        theatre:Boolean,
     }, data() {
         return {
             screen: 0,
@@ -116,6 +117,7 @@ export default {
         // Register an event listener when the Vue component is ready
         this.screen=window.innerWidth;
         window.addEventListener('resize', this.onResize)
+        this.update();
     },
     beforeDestroy() {
         // Unregister the event listener before destroying this Vue instance
@@ -135,7 +137,7 @@ export default {
         },
         index() {
             this.update();
-        }
+        },
      
     }
 

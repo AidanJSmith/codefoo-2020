@@ -13,7 +13,7 @@
     </div>
      <video ref="video"   @click="changeVideoState('play')"> <!-- Click anywhere on the video to play/pause it --->
      </video>
-     <div id="video-controls" class="controls container showhover" data-state="hidden"> <!-- Bottom navbar progress and seeking--->
+     <div id="video-controls" class="controls container showhover" :style="theatre ?'transform:translateY(2.5vh)': null" data-state="hidden"> <!-- Bottom navbar progress and seeking--->
         <div class="progress-container columns is-mobile" ref="progress"  @mousemove="doDrag($event)"  @mousedown="dragging=true"  @click="setTime($event)">
           <span class="finished"  :style="`width:`+currentTime+'%;'"></span>
           <div class="currentplace"></div>
@@ -33,7 +33,7 @@
             </div>
           <div class="time-text">{{Math.floor(currentTime*endTime/100/60)}}:{{((((currentTime/100)*endTime)%60)/100).toFixed(3).slice(2,4)}} / {{Math.floor(endTime/60)}}:{{((endTime%60)/100).toFixed(3).slice(2,4)}}  </div>
           </div>
-          <div class="container right-most is-mobile"> <!-- These were all made in photoshop based on your specifications. They may not be perfect, and would be replaced in a production version of the code. They are built like this to be mapped as individual buttons in the future.--->
+          <div class="container right-most is-mobile" :style="theatre? `transform:translate(9vw,-60.5%)` : null"> <!-- These were all made in photoshop based on your specifications. They may not be perfect, and would be replaced in a production version of the code. They are built like this to be mapped as individual buttons in the future.--->
               <img :src="qualityGeneral" @click="switchQuality()" class="bar-image right-paramters hd">
               <img :src="qualitySpecific" @click="switchQuality()" class="bar-image img4k">
               <img src="../assets/CC.png" class="bar-image right-paramters">
@@ -52,6 +52,7 @@ export default {
   props: {
     video: {},
     currentIndex:Number,
+    theatre: Boolean,
   },
   data() {
     return {
@@ -66,7 +67,6 @@ export default {
       volume:100,
       endTime:0,
       quality:1080,
-      theatre:false,
       title:"Loading..." //Default the title to loading in order to avoid state-based issues.
     }
   },
@@ -124,7 +124,7 @@ export default {
    },
   theatreMode() {
     this.$emit('theatre');
-    this.theatre=!this.theatre;
+
   },
   changeVideoSrc() { //Sets the source to fit the quality
      let maxDif=Math.min();
@@ -264,6 +264,7 @@ button {
   width:6%;
   height:2%;
   font-size:.7em;
+  align-content: right;
 }
 .right-paramters {
   margin-left:5%;
@@ -436,13 +437,7 @@ video:hover + .showhover{
         font-size:1.25em;
         
       }
-      .right-most {
-        transform:translateY(-60%);
-        right:-5em;
-        width:6%;
-        height:2%;
-        font-size:.7em;
-      }
+  
       .share {
         font-size:1.5em;
         transform: translate(60%,-390%);

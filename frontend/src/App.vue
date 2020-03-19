@@ -4,7 +4,7 @@
     <div v-if="screen>=1100&&!theatreMode">
     <div class="columns vidart">
       <div class="column player">
-        <VideoPlayer :video="videos[currentIndex]" :currentIndex="currentIndex"  @theatre="theatre()" @nextVideo="nextVideo()"/>
+        <VideoPlayer :theatre="theatreMode" :video="videos[currentIndex]" :currentIndex="currentIndex"  @theatre="theatre()" @nextVideo="nextVideo()"/>
         <div class="columns">
           <b class="title is-size-2 column">{{title}}</b>
         </div>
@@ -13,7 +13,7 @@
         </div>
      </div>
     <div class="column playlist is-4">
-      <UpcomingPlaylist :cards="videos" @setVideo="setVideo" :index="currentIndex+1"/>
+      <UpcomingPlaylist  :theatre="theatreMode" :cards="videos" @setVideo="setVideo" :index="currentIndex+1"/>
     </div>
     </div>
   </div>
@@ -21,7 +21,7 @@
   <div v-else>
       <div class="columns vidart">
       <div class="column player">
-        <VideoPlayer :video="videos[currentIndex]" :currentIndex="currentIndex"  @nextVideo="nextVideo()"/>
+        <VideoPlayer :theatre="theatreMode" :video="videos[currentIndex]" :currentIndex="currentIndex"   @theatre="theatre()" @nextVideo="nextVideo()"/>
         <div class="columns">
           <b class="title is-size-2 column">{{title}}</b>
         </div>
@@ -30,7 +30,7 @@
         </div>
      </div>
     </div>
-    <UpcomingPlaylist :cards="videos" @setVideo="setVideo" :index="currentIndex"/>
+    <UpcomingPlaylist  :theatre="theatreMode" :cards="videos" @setVideo="setVideo" :index="currentIndex+1"/>
   </div>
    
   </div>
@@ -60,6 +60,9 @@ export default {
   methods: {
     onResize() {
       this.screen=window.innerWidth; //This is used to determine whether or not to show the playlist on the bottom or side.
+      if (this.screen<1100) {
+        this.theatreMode=false;
+      }
     },
     nextVideo() {
       if(this.currentIndex+1<this.videos.length) { //Updates the place 
