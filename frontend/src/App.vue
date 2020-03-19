@@ -1,10 +1,10 @@
 <template>
  <!--Contains the version of the site in which the playlists are on the side.-->
   <div id="app" class="container">
-    <div v-if="screen>=1100">
+    <div v-if="screen>=1100&&!theatreMode">
     <div class="columns vidart">
       <div class="column player">
-        <VideoPlayer :video="videos[currentIndex]" :currentIndex="currentIndex"  @nextVideo="nextVideo()"/>
+        <VideoPlayer :video="videos[currentIndex]" :currentIndex="currentIndex"  @theatre="theatre()" @nextVideo="nextVideo()"/>
         <div class="columns">
           <b class="title is-size-2 column">{{title}}</b>
         </div>
@@ -53,7 +53,8 @@ export default {
       currentIndex:0,
       videos:[],
       title:"Loading...",
-      body:"Loading..."
+      body:"Loading...",
+      theatreMode:false,
     }
   },
   methods: {
@@ -67,7 +68,10 @@ export default {
     },
     setVideo(int) {
       this.currentIndex=int;
-    }
+    },
+    theatre() {
+      this.theatreMode=!this.theatreMode;
+    },
   },
   mounted() {
     // Register an event listener when the Vue component is ready
