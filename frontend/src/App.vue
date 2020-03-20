@@ -1,10 +1,10 @@
 <template>
  <!--Contains the version of the site in which the playlists are on the side.-->
-  <div id="app" class="container">
-    <div v-if="screen>=1100&&!theatreMode">
+  <div id="app" class="container" :style="fullscreen ? `margin-left:0;margin-top:0;margin-bottom:0;`: null">
+    <div v-if="screen>=1100&&!theatreMode&&!fullscreen">
     <div class="columns vidart">
       <div class="column player">
-        <VideoPlayer :theatre="theatreMode" :video="videos[currentIndex]" :currentIndex="currentIndex"  @theatre="theatre()" @nextVideo="nextVideo()"/>
+        <VideoPlayer :theatre="theatreMode" :fullscreen="fullscreen" @toggleFullScreen="changeFullscreen"  :video="videos[currentIndex]" :currentIndex="currentIndex"  @theatre="theatre()" @nextVideo="nextVideo()"/>
         <div class="columns">
           <b class="title is-size-2 column">{{title}}</b>
         </div>
@@ -18,22 +18,35 @@
     </div>
   </div>
   <!--Contains the version of the site in which the playlists are on the bottom. -->
-  <div v-else>
-      <div class="columns vidart">
-      <div class="column player">
-        <VideoPlayer :theatre="theatreMode" :video="videos[currentIndex]" :currentIndex="currentIndex"   @theatre="theatre()" @nextVideo="nextVideo()"/>
-        <div class="columns">
-          <b class="title is-size-2 column">{{title}}</b>
-        </div>
-        <div class="columns">
-          <div class="body column">{{body}}</div>
-        </div>
-     </div>
+    <div v-else-if="!fullscreen">
+        <div class="columns vidart">
+        <div class="column player">
+          <VideoPlayer :theatre="theatreMode" :fullscreen="fullscreen"  @toggleFullScreen="changeFullscreen" :video="videos[currentIndex]" :currentIndex="currentIndex"   @theatre="theatre()" @nextVideo="nextVideo()"/>
+          <div class="columns">
+            <b class="title is-size-2 column">{{title}}</b>
+          </div>
+          <div class="columns">
+            <div class="body column">{{body}}</div>
+          </div>
+      </div>
+      </div>
+      <UpcomingPlaylist  :theatre="theatreMode" :cards="videos" @setVideo="setVideo" :index="currentIndex+1"/>
     </div>
-    <UpcomingPlaylist  :theatre="theatreMode" :cards="videos" @setVideo="setVideo" :index="currentIndex+1"/>
+    <div v-else>
+
+          <VideoPlayer :theatre="theatreMode||fullscreen" :fullscreen="fullscreen" @toggleFullScreen="changeFullscreen" :video="videos[currentIndex]" :currentIndex="currentIndex"   @theatre="theatre()" @nextVideo="nextVideo()"/>
+          <div v-if="!fullscreen">
+            <div class="columns">
+              <b class="title is-size-2 column">{{title}}</b>
+            </div>
+            <div class="columns">
+              <div class="body column">{{body}}</div>
+            </div>
+            <UpcomingPlaylist  :theatre="theatreMode" :cards="videos" @setVideo="setVideo" :index="currentIndex+1"/>
+        </div>
+      </div>
   </div>
-   
-  </div>
+  
 </template>
 
 <script>
@@ -55,6 +68,7 @@ export default {
       title:"Loading...",
       body:"Loading...",
       theatreMode:false,
+      fullscreen:true,
     }
   },
   methods: {
@@ -74,6 +88,9 @@ export default {
     },
     theatre() {
       this.theatreMode=!this.theatreMode;
+    },
+    changeFullscreen() {
+      this.fullscreen=!this.fullscreen;
     },
   },
   mounted() {

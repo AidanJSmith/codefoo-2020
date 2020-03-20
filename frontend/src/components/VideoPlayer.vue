@@ -1,5 +1,5 @@
 <template>
-  <div class="vid-container" @mouseup="dragging=false;volumedrag=false" >
+  <div class="vid-container" @mouseup="dragging=false;volumedrag=false"  :style="fullscreen ? `overflow-y: hidden;width:102vw;height:103.5vh;transform:translateY(-3%);margin-bottom:0%;overflow:hidden;`: null" >
     <!-- Some FA assets are used... as they are provincial, I have used a traditional stylesheet here. --->
     <link rel="stylesheet" 
         href="https://use.fontawesome.com/releases/v5.2.0/css/all.css" 
@@ -11,9 +11,10 @@
             <i class="fas fa-share share column is-4"></i>
         </div>
     </div>
-     <video ref="video"   @click="changeVideoState('play')"> <!-- Click anywhere on the video to play/pause it --->
+     <video ref="video"   class=".showhover"  @click="changeVideoState('play')"> <!-- Click anywhere on the video to play/pause it --->
      </video>
-     <div id="video-controls" class="controls container showhover" :style="theatre ?'transform:translateY(2.5vh)': null" data-state="hidden"> <!-- Bottom navbar progress and seeking--->
+     <div :style="fullscreen ? `zoom:1.3;-moz-transform: scale(1.3) translate(12%,20%)` : ``">
+     <div id="video-controls" class="controls container showhover" :style="theatre ?'transform:translateY(2.5vh)': ``" data-state="hidden"> <!-- Bottom navbar progress and seeking--->
         <div class="progress-container columns is-mobile" ref="progress"  @mousemove="doDrag($event)"  @mousedown="dragging=true"  @click="setTime($event)">
           <span class="finished"  :style="`width:`+currentTime+'%;'"></span>
           <div class="currentplace"></div>
@@ -38,10 +39,11 @@
               <img :src="qualitySpecific" @click="switchQuality()" class="bar-image img4k">
               <img src="../assets/CC.png" class="bar-image right-paramters">
               <img src="../assets/Theatre.png" @click="theatreMode()" class="bar-image right-paramters">
-              <img src="../assets/Miniplayer.png" class="bar-image right-paramters">
+              <img src="../assets/Fullscreen.png"  @click="toggleFullScreen()" class="bar-image right-paramters">
           </div>
         </div>
       </div>
+     </div>
   </div>
 </template>
 
@@ -53,6 +55,7 @@ export default {
     video: {},
     currentIndex:Number,
     theatre: Boolean,
+    fullscreen:Boolean,
   },
   data() {
     return {
@@ -124,7 +127,9 @@ export default {
    },
   theatreMode() {
     this.$emit('theatre');
-
+  },
+  toggleFullScreen() {
+    this.$emit('toggleFullScreen');
   },
   changeVideoSrc() { //Sets the source to fit the quality
      let maxDif=Math.min();
@@ -358,7 +363,7 @@ video {
   opacity: 0%;
   transition: opacity .25s;
 }
-video:hover + .showhover{
+.vid-container:hover  .showhover{
   opacity: 100%;
 }
 .showhover:hover{
