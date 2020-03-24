@@ -1,5 +1,5 @@
 <template>
-  <div class="vid-container" @mouseup="dragging=false;volumedrag=false"  :style="fullscreen ? `overflow-y: hidden;width:102vw;height:103.5vh;transform:translateY(-3%);margin-bottom:0%;overflow:hidden;`: null" >
+  <div class="vid-container" @mouseup="dragging=false;volumedrag=false"  ref="root" :style="fullscreen ? `overflow-y: hidden;width:102vw;height:103.5vh;transform:translateY(-3%);margin-bottom:0%;overflow:hidden;`: null" >
     <!-- Some FA assets are used... as they are provincial, I have used a traditional stylesheet here. --->
     <link rel="stylesheet" 
         href="https://use.fontawesome.com/releases/v5.2.0/css/all.css" 
@@ -82,27 +82,30 @@ export default {
             }
     },
     changeTime() { //This is the pulse event that updates the status bar & makes changes that depend on time conditions.
-      if(!this.endTime) {
-        this.changeEndTime()
-      }
-      const video=this.$refs.video;
-      this.currentTime= 100*video.currentTime/video.duration;
-      let buff=video.buffered
-      this.playing=video.paused;
-      if(buff.length) {
-        let x= this.bufferedTime
-        this.bufferedTime= 100*(-1*buff.start(buff.length-1)+buff.end(buff.length-1))/video.duration;
-        if (this.bufferedTime<=2) {
-          this.bufferedTime=x;
+      if (this.isMounted) {
+        if(!this.endTime) {
+          this.changeEndTime()
+        }
+        const video=this.$refs.video;
+        this.currentTime= 100*video.currentTime/video.duration;
+        let buff=video.buffered
+        this.playing=video.paused;
+        if(buff.length) {
+          let x= this.bufferedTime
+          this.bufferedTime= 100*(-1*buff.start(buff.length-1)+buff.end(buff.length-1))/video.duration;
+          if (this.bufferedTime<=2) {
+            this.bufferedTime=x;
+          }
+        }
+        if(video.ended&&!this.loop) {
+          this.$emit("nextVideo");
+        }
+        if(video.ended&&this.loop) {
+          this.changeVideoState("play");
         }
       }
-      if(video.ended&&!this.loop) {
-        this.$emit("nextVideo");
-      }
-      if(video.ended&&this.loop) {
-        this.changeVideoState("play");
-      }
-      setTimeout(this.changeTime,this.dragging ? 20 : 200); //Make this loop run faster if they're dragging for a smoother feel.
+        setTimeout(this.changeTime,this.dragging ? 20 : 200); //Make this loop run faster if they're dragging for a smoother feel.
+      
     },
     setTime(event) {  //Converts the current time to a timecode based on how far along the progress bar they pressed
       const video=this.$refs.video;
@@ -129,8 +132,19 @@ export default {
     this.$emit('theatre');
   },
   toggleFullScreen() {
+    if ( this.$refs.root.exitFullscreen) {
+           this.$refs.root.exitFullscreen();
+        } else if ( this.$refs.root.msExitFullscreen) {
+           this.$refs.root.msExitFullscreen();
+        } else if ( this.$refs.root.mozCancelFullScreen) {
+           this.$refs.root.mozCancelFullScreen();
+        } else if ( this.$refs.root.webkitExitFullscreen) {
+           this.$refs.root.webkitExitFullscreen();
+        }
+    
+      
     this.$emit('toggleFullScreen');
-  },
+    },
   changeVideoSrc() { //Sets the source to fit the quality
      let maxDif=Math.min();
     const video=this.$refs.video;
@@ -155,6 +169,30 @@ export default {
          video.currentTime=video.duration*(event.clientX -  this.$refs.progress.getBoundingClientRect().left)/this.$refs.progress.getBoundingClientRect().width;
       }
    },
+   updateFullScreen() { //https://stackoverflow.com/questions/21280966/toggle-fullscreen-exit
+      if (! this.$refs.root.fullscreenElement &&    // alternative standard method
+          ! this.$refs.root.mozFullScreenElement && ! this.$refs.root.webkitFullscreenElement && ! this.$refs.root.msFullscreenElement ) {  // current working methods
+        if ( this.$refs.root.requestFullscreen) {
+           this.$refs.root.requestFullscreen();
+        } else if ( this.$refs.root.msRequestFullscreen) {
+           this.$refs.root.msRequestFullscreen();
+        } else if ( this.$refs.root.mozRequestFullScreen) {
+           this.$refs.root.mozRequestFullScreen();
+        } else if ( this.$refs.root.webkitRequestFullscreen) {
+           this.$refs.root.webkitRequestFullscreen(Element.ALLOW_KEYBOARD_INPUT);
+        }
+      } else {
+        if ( this.$refs.root.exitFullscreen) {
+           this.$refs.root.exitFullscreen();
+        } else if ( this.$refs.root.msExitFullscreen) {
+           this.$refs.root.msExitFullscreen();
+        } else if ( this.$refs.root.mozCancelFullScreen) {
+           this.$refs.root.mozCancelFullScreen();
+        } else if ( this.$refs.root.webkitExitFullscreen) {
+           this.$refs.root.webkitExitFullscreen();
+        }
+      }
+    },
    setVolume(event) { //Round the volume to a multiple of ten for consistency. Set the volume.
      const video=this.$refs.video;
      this.volume=100*(Math.abs(this.$refs.volume.getBoundingClientRect().left - event.clientX)/this.$refs.volume.getBoundingClientRect().width).toFixed(1);
@@ -184,11 +222,30 @@ export default {
       this.endTime=this.$refs.video.duration;
     }
   }, mounted () { //Initial set up when the video is mounted.
-      setInterval(this.changeTime(),20);
-      window.addEventListener('mouseup', this.stopDrag());
-      this.isMounted=true;
-      this.$refs.video.removeAttribute('controls');
-      this.changeEndTime()
+        setInterval(this.changeTime(),20);
+        window.addEventListener('mouseup', this.stopDrag());
+        this.isMounted=true;
+        this.$refs.video.removeAttribute('controls');
+        this.changeEndTime()
+        if (this.video!=undefined) {
+          let maxDif=Math.min();
+          //Find the closest height to the selected quality from the last video.
+          for (let item of this.video.assets) {
+            if (Math.abs(item.height-this.quality)<maxDif) {
+                this.$refs.video.src=item.url;
+                maxDif=Math.abs(item.height-this.quality);
+            }
+          }
+          console.log(`Loaded: ${this.$refs.video.src}`);
+          this.$refs.video.load()
+          if(this.currentIndex!=0) this.changeVideoState("play");
+          this.changeEndTime();
+          this.title=this.video.metadata.title;
+          this.updateFullScreen();
+        }
+
+  },destroyed () {
+      this.isMounted=false;
   }, watch : {
       video() { //If the video object passed changes, load it, and start playing. (this only triggers on videos after the first.)
           let maxDif=Math.min();
@@ -204,7 +261,7 @@ export default {
           if(this.currentIndex!=0) this.changeVideoState("play");
           this.changeEndTime();
           this.title=this.video.metadata.title;
-      }
+      },
   }, computed : {
     qualityGeneral() {
         if (this.quality>=720) {

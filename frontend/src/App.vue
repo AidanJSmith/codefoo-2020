@@ -1,6 +1,6 @@
 <template>
  <!--Contains the version of the site in which the playlists are on the side.-->
-  <div id="app" class="container" :style="fullscreen ? `margin-left:0;margin-top:0;margin-bottom:0;`: null">
+  <div id="app" class="container" ref="app" :style="fullscreen ? `margin-left:0;margin-top:0;margin-bottom:0;`: null">
     <div v-if="screen>=1100&&!theatreMode&&!fullscreen">
     <div class="columns vidart">
       <div class="column player">
@@ -33,7 +33,6 @@
       <UpcomingPlaylist  :theatre="theatreMode" :cards="videos" @setVideo="setVideo" :index="currentIndex+1"/>
     </div>
     <div v-else>
-
           <VideoPlayer :theatre="theatreMode||fullscreen" :fullscreen="fullscreen" @toggleFullScreen="changeFullscreen" :video="videos[currentIndex]" :currentIndex="currentIndex"   @theatre="theatre()" @nextVideo="nextVideo()"/>
           <div v-if="!fullscreen">
             <div class="columns">
@@ -68,7 +67,7 @@ export default {
       title:"Loading...",
       body:"Loading...",
       theatreMode:false,
-      fullscreen:true,
+      fullscreen:false,
     }
   },
   methods: {
@@ -91,6 +90,8 @@ export default {
     },
     changeFullscreen() {
       this.fullscreen=!this.fullscreen;
+      this.$refs.app.exitFullscreen();
+ 
     },
   },
   mounted() {

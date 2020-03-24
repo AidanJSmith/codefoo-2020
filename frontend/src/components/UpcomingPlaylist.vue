@@ -146,11 +146,11 @@ export default {
 
 <style scoped>
 hr {
-    margin-top:2.35%;
+    margin-top:1%;
     height:.25vh;
     width:110%;
     margin-left:2%;
-    margin-bottom:2.35%;
+    margin-bottom:3.55%;
     background-color:lightgray;
 
 }
