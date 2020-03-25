@@ -132,18 +132,7 @@ export default {
     this.$emit('theatre');
   },
   toggleFullScreen() {
-    if ( this.$refs.root.exitFullscreen) {
-           this.$refs.root.exitFullscreen();
-        } else if ( this.$refs.root.msExitFullscreen) {
-           this.$refs.root.msExitFullscreen();
-        } else if ( this.$refs.root.mozCancelFullScreen) {
-           this.$refs.root.mozCancelFullScreen();
-        } else if ( this.$refs.root.webkitExitFullscreen) {
-           this.$refs.root.webkitExitFullscreen();
-        }
-    
-      
-    this.$emit('toggleFullScreen');
+      this.$emit('toggleFullScreen');
     },
   changeVideoSrc() { //Sets the source to fit the quality
      let maxDif=Math.min();
@@ -241,7 +230,9 @@ export default {
           if(this.currentIndex!=0) this.changeVideoState("play");
           this.changeEndTime();
           this.title=this.video.metadata.title;
-          this.updateFullScreen();
+        }
+        if(this.fullscreen==true) {
+            this.updateFullScreen();
         }
 
   },destroyed () {

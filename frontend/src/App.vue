@@ -90,8 +90,9 @@ export default {
     },
     changeFullscreen() {
       this.fullscreen=!this.fullscreen;
-      this.$refs.app.exitFullscreen();
- 
+      if(this.fullscreen==false) {
+        this.$refs.root.exitFullscreen();
+      }
     },
   },
   mounted() {
