@@ -11,6 +11,7 @@ This project is built with Vue.js and the Bulma CSS framework. Several icons are
   - Video seeking.
   - Accurate buffering bar.
   - Responsive layout.
+  - Fullscreen, Theatre-Mode, and more 
   
 ## Setup
 
